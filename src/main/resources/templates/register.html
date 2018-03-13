@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+    <head> 
+        <title>Register Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h2>Register</h2>
+        <form action="/register">
+            Username: <input type='text' name='username'/><br/>
+            Password: <input type='password' name='password'/><br/>
+            <input type='submit' value='Confirm'/><br/>
+            <p th:text="${alert}"/>
+        </form>
+        
+    </body>
+</html>

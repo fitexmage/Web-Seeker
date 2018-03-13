@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+    <head> 
+        <title>Login Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>Web Seeker</h1>
+        <h2>Login</h2>
+        <form action="/login">
+            Username: <input type='text' name='username'/><br/>
+            Password: <input type='password' name='password'/><br/>
+            <input type='submit' value='Login' style="width: 85px; height: 60px;"/><br/>
+            <a href="/register">Register</a><br/>
+            <p th:text="${alert}"/>
+        </form>
+        
+    </body>
+</html>
