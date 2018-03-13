@@ -23,7 +23,7 @@ Allow users to rate and write reviews for the web pages, allow users to "like" a
 Allow users to use search bar to search for name or tags of web pages, allow users to report or request to modify the web pages, allow users to add friends and recommend web pages to their friends, give users recommendation based on history.
 
 ### Finaly Project
-The final project will contain all the functionalities in the use cases. On the home page, users can easily and comfortably see all the possibly useful information, such as the recommendation based on the tags or categories they have read before, most popular web page, and highest rating web page. On the top, users can quickly access into their account information and modify each setting. Each web page will have a page itself and display all the information and evaluation of it.
+The final project will contain all the functionalities in the use cases. Also, as the final version, it will also have all the setting about privacy and security, such as whether or not to allow record history. The website will have buttons for introduction of the arthor and reporting bugs. For the interface, on the home page, users can easily and comfortably see all the possibly useful information, such as the recommendation based on the tags or categories they have read before, most popular web page, and highest rating web page. On the top, users can quickly access into their account information and modify each setting. Each web page will have a page itself and display all the information and evaluation of it.
 
 ## Project Justification
 
