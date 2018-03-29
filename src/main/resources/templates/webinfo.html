@@ -1,15 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head> 
-        <title>Login Page</title>
+        <title>Home Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
-            #submit{
-                width:85px;
+            .info {
+                margin-left: 40%;
             }
-
         </style>
     </head>
     <body>
@@ -40,19 +39,19 @@
                 <input type="submit" class="searchBtn" value="Search"/>
             </form>
         </div>
-        <br/>
 
-        <h2 align="center">Sign in</h2>
-        <br/>
-        <form action="/login" align="center">
-            Username: <input type='text' name='username'/><br/><br/>
-            Password: <input type='password' name='password'/><br/><br/>
-            <input id="submit" type='submit' value='Sign in'/><br/><br/>
-            Don't have an account?
-            <a href="/registerpage">Sign up</a>
-            <br/>
-            <p style="color:red;" th:text="${alert}"/>
-        </form>
+        <!-- //////////////////////////////////////////////////////////////////////// -->
+
+        <h2 align='center' th:text="${web.getWebName()}"></h2><br/>
+        <div class="info">
+            <ul>
+                <li><p th:text="${'Web Name: ' + web.getWebName()}"/></li>
+                <li>URL: <a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}"/></li>
+                <li><p th:text="${'Category: ' + web.categoryToString()}"/></li>
+                <li><p th:text="${'Rate: ' + web.getRate() + ' (' + web.getRater() + ' people rated)'}"/></li>
+                <li><p th:text="${'Description: ' + web.getDescription()}"/></li>
+            </ul>
+        </div>
         <br/>
 
         <div class="footer">

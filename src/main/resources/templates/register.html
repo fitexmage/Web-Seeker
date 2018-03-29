@@ -1,17 +1,60 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head> 
         <title>Register Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/header.css" type="text/css" />
+        <script type="text/javascript" src="/link.js"></script>
+        <style>
+            #confirm{
+                width:85px;
+            }
+        </style>
     </head>
     <body>
-        <h2>Register</h2>
-        <form action="/register">
-            Username: <input type='text' name='username'/><br/>
-            Password: <input type='password' name='password'/><br/>
-            <input type='submit' value='Confirm'/><br/>
-            <p th:text="${alert}"/>
+        <div class="cover">
+            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <div class="dropdown">
+                <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
+                <div class="dropdown-content">
+                    <a href="/userpage">Account</a>
+                    <a href="/logoff">Log off</a>
+                </div>
+            </div>
+            <p class="welcome" th:text="${welcome}"/>
+        </div>
+
+        <div class="header">
+            <h1>Web Seeker</h1>
+        </div>
+
+        <div class="topnav">
+            <a href="/">Home</a>
+            <a href="/">Popular</a>
+            <a href="/">Common</a>
+            <a href="/">Webest</a>
+            <a href="/">Category</a>
+            <form class="search">
+                <input type="text" class="searchBar" placeholder="Search name or tag"/>
+                <input type="submit" class="searchBtn" value="Search"/>
+            </form>
+        </div>
+        <br/>
+
+        <h2 align="center">Register</h2>
+        <br/>
+        <form action="/register" align="center">
+            Username: <input type='text' name='username'/><br/><br/>
+            Password: <input type='password' name='password'/><br/><br/>
+            <input id="confirm" type='submit' value='Confirm'/><br/><br/>
+            Already have an account?
+            <a href="/loginpage">Sign in</a>
+            <p style="color:red;" th:text="${alert}"/>
         </form>
-        
+        <br/>
+
+        <div class="footer">
+            <p>Footer</p>
+        </div>
     </body>
 </html>

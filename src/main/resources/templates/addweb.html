@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head> 
+        <title>User Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/header.css" type="text/css" />
+        <script type="text/javascript" src="/link.js"></script>
+        <style>
+            .leftnav {
+                float: left;
+                width: 15%;
+                margin-left: 5%;
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                background-color: #f1f1f1;
+            }
+
+            li a {
+                display: block;
+                color: #000;
+                padding: 8px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #555;
+                color: white;
+            }
+
+            .addWeb {
+                margin-left: 20%;
+                text-align: center;
+            }
+
+            .textField {
+                width: 100%;
+                padding: 5px 5px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            textarea {
+                width: 100%;
+                height: 200px;
+                padding: 12px 20px;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                resize: none;
+            }
+
+            input[type=submit] {
+                padding:5px 15px;  
+                border:1;
+                cursor:pointer;
+                -webkit-border-radius: 5px;
+                border-radius: 5px; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="cover">
+            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <div class="dropdown">
+                <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
+                <div class="dropdown-content">
+                    <a href="/userpage">Account</a>
+                    <a href="/logoff">Log off</a>
+                </div>
+            </div>
+            <p class="welcome" th:text="${welcome}"/>
+        </div>
+
+        <div class="header">
+            <h1>Web Seeker</h1>
+        </div>
+
+        <div class="topnav">
+            <a href="/">Home</a>
+            <a href="/">Popular</a>
+            <a href="/">Common</a>
+            <a href="/">Webest</a>
+            <a href="/">Category</a>
+            <form class="search">
+                <input type="text" class="searchBar" placeholder="Search name or tag"/>
+                <input type="submit" class="searchBtn" value="Search"/>
+            </form>
+        </div>
+        
+        <!-- //////////////////////////////////////////////////////////////////////// -->
+
+        <div class="leftnav">
+            <ul>
+                <li><a href="/userpage/accountinfo">Account</a></li>
+                <li><a href="/userpage/favorites">Favorites</a></li>
+                <li><a href="/userpage/addweb">Add new web</a></li>
+                <li><a href="/userpage/history">History</a></li>
+                <li><a href="/userpage/setting">Setting</a></li>
+            </ul>
+        </div>
+
+        <div class="addWeb">
+            <h2>Add new web</h2><br/>
+            <form action="/addnewweb">
+                <table align="center" cellspacing="10">
+                    <tr>
+                        <td>Web Name</td>
+                        <td><input type='text' class="textField" name='webName'/></td>
+                    </tr>
+                    <tr>
+                        <td>URL</td>
+                        <td><input type='url' class="textField" name='url'/></td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td>
+                            <select name="category">
+                                <option value="information">Information</option>
+                                <option value="tool">Tool</option>
+                                <option value="entertainment">Entertainment</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><textarea name="description"></textarea></td>
+                    </tr>
+                </table>
+                <br/>
+                <input type='submit' />
+                <p style="color:red;" th:text="${alert}"/>
+            </form>
+        </div>
+        <br/><br/><br/><br/><br/>
+        <div class="footer">
+            <p>Footer</p>
+        </div>
+    </body>
+</html>
