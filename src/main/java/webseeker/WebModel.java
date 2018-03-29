@@ -57,25 +57,43 @@ public class WebModel {
     }
 
     public static int categoryToInt(String category) {
-        if (category.equals("information")) {
+        if (category.equals("portal")) {
             return 1;
-        } else if (category.equals("tool")) {
+        } else if (category.equals("ecommerce")) {
             return 2;
-        } else if (category.equals("entertainment")) {
+        } else if (category.equals("service")) {
             return 3;
+        } else if (category.equals("media")) {
+            return 4;
+        } else if (category.equals("corporate")) {
+            return 5;
+        } else if (category.equals("education")) {
+            return 6;
+        } else if (category.equals("personal")) {
+            return 7;
+        } else if (category.equals("other")) {
+            return 8;
         }
         return 0;
     }
-    
-    public String categoryToString(){
-        if(category == 1){
-            return "Information";
-        }
-        else if(category == 2){
-            return "Tool";
-        }
-        else if(category == 3){
-            return "Entertainment";
+
+    public String categoryToString() {
+        if (category == 1) {
+            return "Portal";
+        } else if (category == 2) {
+            return "E-commerce";
+        } else if (category == 3) {
+            return "Service";
+        } else if (category == 4) {
+            return "Media";
+        } else if (category == 5) {
+            return "Corporate";
+        } else if (category == 6) {
+            return "Education";
+        } else if (category == 7) {
+            return "Personal";
+        } else if (category == 8) {
+            return "Other";
         }
         return "";
     }
