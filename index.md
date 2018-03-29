@@ -14,7 +14,7 @@ On the website, users can register an account and use it for login. After login,
 ## Project Schedule
 
 ### Project Milestone 1
-Allow users to register and login, allow users to see and modify their account information, allow users to provide the information of a new web page on the website, allow users to see lists of web pages and access into it to read the information.
+Allow users to register and login, allow users to see and modify their account information, allow users to add information for a new web page on the website, allow users to see lists of web pages in the popular page and access into it to read the information.
 
 ### Project Milestone 2
 Allow users to rate and write reviews for the web pages, allow users to "like" and "dislike" other reviews, store users' exploring history, display the latest created web page on the home page, allow users to explore web by categories and tags for users to choose, and then display and the rank of rating of web page.
