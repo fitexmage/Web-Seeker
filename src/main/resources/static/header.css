@@ -3,6 +3,16 @@
 }
 body{
     margin: 0;
+    font-size: 15pt;
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+input[type=submit] {
+    padding:5px 15px; 
+    font-size:15pt;
+    border:1;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
 }
 /* --------------------------------------------- */
 .cover{
@@ -69,6 +79,7 @@ body{
     padding: 10px;
     margin-left:5%;
     margin-right:5%;
+    font-size: 18pt;
     text-align: center;
     background-color:#f1f1f1;
 }
@@ -84,6 +95,7 @@ body{
     float:left;
     padding: 14px 16px;
     color: #f2f2f2;
+    font-size:15pt;
     text-align: center;
     text-decoration: none;
 }
@@ -96,13 +108,16 @@ body{
     float:right;
 }
 .searchBar{
-    width:200px;
-    height:30px;
+    width:250px;
+    font-size:13pt;
+    padding: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 .searchBtn{
-    padding:8px 15px;
-    margin: 10px 20px 10px;
-    border:0px;
+    margin: 7px 16px 7px;
 }
 /* --------------------------------------------- */
 .footer {

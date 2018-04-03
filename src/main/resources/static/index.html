@@ -1,18 +1,31 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head> 
-        <title>Login Page</title>
+        <title>Home Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="header.css" type="text/css" />
+        <script type="text/javascript" src="link.js"></script>
     </head>
     <body>
-        <h1>Web Seeker</h1>
-        <h2>Login</h2>
-        <form action="/login">
-            Username: <input type='text' name='username'/><br/>
-            Password: <input type='password' name='password'/><br/>
-            <input type='submit' value='Login' style="width: 85px; height: 60px;"/><br/>
-            <a href="/register"/>Register</a>
-        </form>
-        
+        <div class="cover">
+            <input type="button" id="login" Value="Sign in" class="button" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <a id="username" href="/" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
+            <p id="welcome" th:text="${welcome}"/>
+        </div>
+
+        <div class="header">
+            <h1>Web Seeker</h1>
+        </div>
+
+        <div class="topnav">
+            <a href="/">Home</a>
+            <a href="/loginPage">Information</a>
+            <a href="/loginPage">Tool</a>
+            <a href="/loginPage">Fun</a>
+            <form id="search">
+                <input type="text" id="searchBar" placeholder="Search name or tag"/>
+                <input type="submit" id="searchBtn" Value="Search"/>
+            </form>
+        </div>
     </body>
 </html>

@@ -1,27 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head> 
-        <title>Login Page</title>
+        <title>Header</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
-        <style>
-            .textField {
-                width: 20%;
-                padding: 10px 5px;
-                margin: 8px 30px;
-                display: inline-block;
-                font-size: 15px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-            }
-
-            #submit{
-                width:85px;
-            }
-
-        </style>
+        
     </head>
     <body>
         <div class="cover">
@@ -42,7 +26,7 @@
 
         <div class="topnav">
             <a href="/">Home</a>
-            <a href="/">Popular</a>
+            <a href="/loginpage">Popular</a>
             <a href="/">Common</a>
             <a href="/">Webest</a>
             <a href="/">Category</a>
@@ -50,24 +34,6 @@
                 <input type="text" class="searchBar" placeholder="Search name or tag"/>
                 <input type="submit" class="searchBtn" value="Search"/>
             </form>
-        </div>
-        <br/>
-
-        <h2 align="center">Sign in</h2>
-        <br/>
-        <form action="/login" align="center">
-            Username: <input type='text' class="textField" name='username'/><br/><br/>
-            Password: <input type='password' class="textField" name='password'/><br/><br/>
-            <input id="submit" type='submit' value='Sign in'/><br/><br/>
-            Don't have an account?
-            <a href="/registerpage">Sign up</a>
-            <br/>
-            <p style="color:red;" th:text="${alert}"/>
-        </form>
-        <br/>
-
-        <div class="footer">
-            <p>Footer</p>
         </div>
     </body>
 </html>
