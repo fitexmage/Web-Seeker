@@ -33,19 +33,8 @@
                 color: white;
             }
 
-            .accountInfo {
+            .webList {
                 text-align: center;
-            }
-
-            .textField {
-                width: 15%;
-                padding: 10px 5px;
-                margin: 8px 30px;
-                display: inline-block;
-                font-size: 15px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
             }
 
             .rightnav {
@@ -87,28 +76,22 @@
 
         <div class="leftnav">
             <ul>
-                <li><a href="/userpage/accountinfo">Account</a></li>
-                <li><a href="/userpage/favorites">Favorites</a></li>
-                <li><a href="/userpage/addweb">Add new web</a></li>
-                <li><a href="/userpage/history">History</a></li>
-                <li><a href="/userpage/setting">Setting</a></li>
+                <li><a href="/userpage?category=1">Portal</a></li>
+                <li><a href="/userpage?category=2">E-commerce</a></li>
+                <li><a href="/userpage?category=3">Service</a></li>
+                <li><a href="/userpage?category=4">Media</a></li>
+                <li><a href="/userpage?category=5">Corporate</a></li>
+                <li><a href="/userpage?category=6">Education</a></li>
+                <li><a href="/userpage?category=7">Personal</a></li>
+                <li><a href="/userpage?category=8">Other</a></li>
             </ul>
         </div>
 
         <div class="rightnav"></div>
 
         <br/>
-        <div class="accountInfo">
-            <h2>Account Information</h2>
-            <form action="/userpage/modifyinfo">
-                Username<input type="text" class="textField" name="username" th:value="${username}" /><br/>
-                <p style="color:red;" th:text="${alert}"/>
-                <input type="submit" class="modify" value="Modify" />
-            </form>
-            <br/>
-            <p>Favorites: 0 webs</p>
-            <p>Rate: 0 times</p>
-            <p>Comment: 0 times</p>
+        <div class="webList">
+            
         </div>
         <br/><br/><br/><br/><br/>
         <div class="footer">

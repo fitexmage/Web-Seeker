@@ -11,11 +11,45 @@
                 margin-left: auto; 
                 margin-right: auto;
             }
+
+            textarea{
+                width: 500px;
+                height: 150px;
+            }
+
+            .commentBlock{
+                margin: 10px;
+                width: 500px;
+                height: 150px;
+                border-style: outset;
+            }
+
+            .comment{
+                float: left;
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+
+            .like{
+                float: right;
+                margin-top: 10px;
+                margin-right: 10px;
+            }
+
+            .poster{
+                float: right;
+                margin-right: 10px;
+            }
+
+            .time{
+                float: right;
+                margin-right: 10px;
+            }
         </style>
     </head>
     <body>
         <div class="cover">
-            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
             <div class="dropdown">
                 <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
                 <div class="dropdown-content">
@@ -33,9 +67,8 @@
         <div class="topnav">
             <a href="/">Home</a>
             <a href="/">Popular</a>
-            <a href="/">Common</a>
             <a href="/">Webest</a>
-            <a href="/">Category</a>
+            <a href="/category">Category</a>
             <form class="search">
                 <input type="text" class="searchBar" placeholder="Search name or tag"/>
                 <input type="submit" class="searchBtn" value="Search"/>
@@ -48,14 +81,57 @@
         <div class="info">
             <ul>
                 <li><p th:text="${'Web Name: ' + web.getWebName()}"/></li>
-                <li>URL: <a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}"/></li>
+                <li>URL: <a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank" /></li>
                 <li><p th:text="${'Category: ' + web.categoryToString()}"/></li>
-                <li><p th:text="${'Rate: ' + web.getRate() + ' (' + web.getRater() + ' people rated)'}"/></li>
+                <li><p th:text="${'Average Rate: ' + web.rate() + ' (' + web.getRater() + ' people rated)'}"/></li>
+                <li th:if="${canRate}">
+                    <form action="/rate">
+                        <select name="score">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <input type="hidden" name="web" th:value="${web.getId()}" />
+                        <input type="submit" value="Rate" />
+                    </form>
+                </li>
                 <li><p th:text="${'Description: ' + web.getDescription()}"/></li>
             </ul>
-        </div>
-        <br/>
+            <br/>
+            <p th:if="${!canComment}">Login to see the comments!</p>
 
+            <div th:if="${canComment}">
+                <div>
+                    <p>Write your comment!</p>
+                    <form action="/comment">
+                        <textarea name="comment" />
+                        <input type="hidden" name="web" th:value="${web.getId()}" />
+                        <input type="hidden" name="canRate" th:value="${canRate}" />
+                        <input type="submit" />
+                    </form>
+                </div> 
+                <br/>
+                <div th:each="comment: ${commentList}">
+                    <div class="commentBlock">
+                        <div class="comment" th:text="${comment.getComment()}" />
+                        <table>
+                            <form action="/like">
+                                <input type="hidden" name="comment" th:value="${comment.getId()}" />
+                                <input type="hidden" name="web" th:value="${web.getId()}" />
+                                <input type="hidden" name="canRate" th:value="${canRate}" />
+                                <input type="submit" class="like" th:value="'Like: ' + ${comment.getNumLike()}" />
+                            </form>
+                        </table>
+                        <br/><br/><br/><br/>
+                        <div class="poster" th:text="'Poster: ' + ${comment.getPoster().getUsername()}" />
+                        <br/>
+                        <div class="time" th:text="${comment.getPostTime().toLocalDate()} + ' ' + ${comment.getPostTime().toLocalTime()}" />
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="footer">
             <p>Footer</p>
         </div>

@@ -47,11 +47,36 @@
                 color:#000000;
                 background-color:#EAF2D3;
             }
+            
+            .new {
+                border-collapse:collapse;
+            }
+
+            .new td, .new th 
+            {
+                border:1px solid #98bf21;
+                padding:3px 7px 2px 7px;
+            }
+
+            .new th 
+            {
+                font-size:1.1em;
+                padding-top:5px;
+                padding-bottom:4px;
+                background-color:#A7C942;
+                color:#ffffff;
+            }
+
+            .new tr.alt td 
+            {
+                color:#000000;
+                background-color:#EAF2D3;
+            }
         </style>
     </head>
     <body>
         <div class="cover">
-            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
             <div class="dropdown">
                 <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
                 <div class="dropdown-content">
@@ -69,9 +94,8 @@
         <div class="topnav">
             <a href="/">Home</a>
             <a href="/">Popular</a>
-            <a href="/">Common</a>
             <a href="/">Webest</a>
-            <a href="/">Category</a>
+            <a href="/category">Category</a>
             <form class="search">
                 <input type="text" class="searchBar" placeholder="Search name or tag"/>
                 <input type="submit" class="searchBtn" value="Search"/>
@@ -101,7 +125,7 @@
             <br/>
             <hr></hr>
             <div class="block">
-                <h2>Find new web</h2>
+                <h2>Find new added web</h2>
                 <table class="new" align="center" border="1">
                     <tr>
                         <th>Web name</th>
@@ -109,11 +133,11 @@
                         <th>Category</th>
                         <th>Detail</th>
                     </tr>
-                    <tr th:each="web: ${webList}">
+                    <tr th:each="web: ${newList}">
                         <td th:text="${web.getWebName()}"/>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString()}"/>
-                        <td><a href="">Enter</a></td>
+                        <td><a th:href="@{'/getwebinfo?webId=' + ${web.getId()}}">Enter</a></td>
                     </tr>
                 </table>
             </div>

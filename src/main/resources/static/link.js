@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-function loginPage() {
-    window.location.href = "/loginpage";
+function login() {
+    window.location.href = "/login";
 }
 
-function registerPage() {
-    window.location.href = "/registerpage";
+function register() {
+    window.location.href = "/register";
 }
 

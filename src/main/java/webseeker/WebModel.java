@@ -5,6 +5,7 @@
  */
 package webseeker;
 
+import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,18 +29,18 @@ public class WebModel {
 
     private String webName;
     private String url;
-    private int category; // 1: Information 2: Tool
+    private int category;
     private String description;
-    private int rate;
-    private int rater;
+    private int totalScore;
+    private int rater; // Num of raters
     private ZonedDateTime addTime;
 
-    public WebModel(AccountModel creator, String webName, String url, int category, String description, int rate, int rater, ZonedDateTime addTime) {
+    public WebModel(AccountModel creator, String webName, String url, int category, String description, int totalScore, int rater, ZonedDateTime addTime) {
         this.creator = creator;
         this.webName = webName;
         this.url = url;
         this.category = category;
-        this.rate = rate;
+        this.totalScore = totalScore;
         this.rater = rater;
         this.addTime = addTime;
     }
@@ -54,6 +55,11 @@ public class WebModel {
         } else {
             return false;
         }
+    }
+
+    public static WebModel newWeb(AccountModel theAccountModel, String webName, String url, String category, String description) {
+        WebModel newWebModel = new WebModel(theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, ZonedDateTime.now());
+        return newWebModel;
     }
 
     public static int categoryToInt(String category) {
@@ -96,6 +102,15 @@ public class WebModel {
             return "Other";
         }
         return "";
+    }
+
+    public String rate() {
+        DecimalFormat df = new DecimalFormat("#.0");
+        if (totalScore != 0) {
+            return df.format((double) totalScore / (double) rater);
+        } else {
+            return "0";
+        }
     }
 
     /**
@@ -183,17 +198,17 @@ public class WebModel {
     }
 
     /**
-     * @return the rate
+     * @return the totalScore
      */
-    public int getRate() {
-        return rate;
+    public int getTotalScore() {
+        return totalScore;
     }
 
     /**
-     * @param rate the rate to set
+     * @param totalScore the totalScore to set
      */
-    public void setRate(int rate) {
-        this.rate = rate;
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
     }
 
     /**

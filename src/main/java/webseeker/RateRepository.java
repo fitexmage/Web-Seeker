@@ -12,11 +12,7 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author fitexmage
  */
-public interface WebRepository extends CrudRepository<WebModel, Long>{
+public interface RateRepository extends CrudRepository<RateModel, Long>{
     
-    public WebModel findById(Long id);
-    
-    public List<WebModel> findTop5ByOrderByAddTimeDesc();
-    
-    //public List<WebModel> find
+    public RateModel findByWebAndRater(WebModel theWebModel, AccountModel theAccountModel);
 }

@@ -1,6 +1,5 @@
 package webseeker;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,15 @@ public class MainController {
     @Autowired
     private WebRepository theWebRepository;
 
+    @Autowired
+    private RateRepository theRateRepository;
+
+    @Autowired
+    private CommentRepository theCommentRepository;
+
+    @Autowired
+    private ActionRepository theActionRepository;
+
     public MainController() {
 
     }
@@ -28,141 +36,118 @@ public class MainController {
             AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
             model.addAttribute("username", theAccountModel.getUsername());
         }
-        List webList = (List<WebModel>) theWebRepository.findAll();
-        model.addAttribute("webList", webList);
+        List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
+        model.addAttribute("newList", newList);
         return "homepage";
     }
 
-    @RequestMapping("/loginpage")
-    public String loginPage(Model model, HttpSession session) {
-        session.removeAttribute("user");
-        return "login";
-    }
-
-    @RequestMapping("/login")
-    public String login(@RequestParam(value = "username", defaultValue = "") String username,
-            @RequestParam(value = "password", defaultValue = "") String password,
-            Model model, HttpSession session) {
-        AccountModel newAccountModel = new AccountModel(username, password);
-        if (newAccountModel.isValid()) {
-            AccountModel theAccountModel = theAccountRepository.findByUsername(username);
-            if (theAccountModel != null) {
-                if (theAccountModel.getPassword().equals(password)) {
-                    model.addAttribute("username", username);
-                    model.addAttribute("welcome", "Welcome " + username + "!");
-                    session.setAttribute("user", theAccountModel);
-
-                    List webList = (List<WebModel>) theWebRepository.findAll();
-                    model.addAttribute("webList", webList);
-                    return "homepage";
-                }
-            }
-            model.addAttribute("alert", "Username and password do not match!");
-            return "login";
-        } else {
-            model.addAttribute("alert", "Please input username and password!");
-            return "login";
-        }
-    }
-
-    @RequestMapping("/registerpage")
-    public String registerPage(Model model) {
-        return "register";
-    }
-
-    @RequestMapping("/register")
-    public String register(@RequestParam(value = "username", defaultValue = "") String username,
-            @RequestParam(value = "password", defaultValue = "") String password,
-            Model model
-    ) {
-        AccountModel theAccountModel = new AccountModel(username, password);
-        if (theAccountModel.isValid()) {
-            if (theAccountRepository.findByUsername(username) == null) {
-                theAccountRepository.save(theAccountModel);
-                model.addAttribute("alert", "Register Successfully!");
-                return "login";
-            } else {
-                model.addAttribute("alert", "Username already exists!");
-                return "register";
-            }
-        } else {
-            model.addAttribute("alert", "Please input valid username and password!");
-            return "register";
-        }
+    @RequestMapping("/category")
+    public String category(@RequestParam(value = "category", defaultValue = "") int category,
+            Model model) {
+        return "category";
     }
 
     @RequestMapping("/getwebinfo")
     public String getWebInfo(@RequestParam(value = "webId", defaultValue = "") Long webId,
             Model model, HttpSession session) {
+        WebModel theWebModel = theWebRepository.findById(webId);
+
+        RateModel theRateModel = null;
+        boolean canRate = false;
+        boolean canComment = false;
+
         if (session.getAttribute("user") != null) {
             AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
             model.addAttribute("username", theAccountModel.getUsername());
+
+            theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
+            canRate = true;
+            canComment = true;
+
+            ActionModel newAction = ActionModel.newAction(theWebModel, theAccountModel);
+            theActionRepository.save(newAction);
         }
-        WebModel theWebModel = theWebRepository.findById(webId);
+
+        if (theRateModel != null) {
+            canRate = false;
+        }
+
+        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
+
         model.addAttribute("web", theWebModel);
+        model.addAttribute("canRate", canRate);
+        model.addAttribute("canComment", canComment);
+        model.addAttribute("commentList", commentList);
         return "webinfo";
     }
 
-    @RequestMapping("/userpage")
-    public String userPage(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-        model.addAttribute("username", theAccountModel.getUsername());
-        return "accountinfo";
-    }
-
-    @RequestMapping("/userpage/accountinfo")
-    public String accountInfo(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-        model.addAttribute("username", theAccountModel.getUsername());
-        return "accountinfo";
-    }
-
-    @RequestMapping("/modifyinfo")
-    public String modifyInfo(@RequestParam(value = "username", defaultValue = "") String username,
+    @RequestMapping("/rate")
+    public String rate(@RequestParam(value = "score", defaultValue = "") String score,
+            @RequestParam(value = "web", defaultValue = "") Long webId,
             Model model, HttpSession session) {
+        WebModel theWebModel = theWebRepository.findById(webId);
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
 
-        if (!username.equals("")) {
-            theAccountModel.setUsername(username);
-            theAccountRepository.save(theAccountModel);
-            model.addAttribute("alert", "Modify successfully!");
-        } else {
-            model.addAttribute("alert", "Something was wrong!");
+        RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
+        if (theRateModel == null) {
+            RateModel newRate = RateModel.newRate(theWebModel, theAccountModel, Integer.parseInt(score));
+            theRateRepository.save(newRate);
+
+            theWebModel.setRater(theWebModel.getRater() + 1);
+            theWebModel.setTotalScore(theWebModel.getTotalScore() + Integer.parseInt(score));
+            theWebRepository.save(theWebModel);
         }
 
+        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
+
         model.addAttribute("username", theAccountModel.getUsername());
-        return "accountinfo";
+        model.addAttribute("web", theWebModel);
+        model.addAttribute("canRate", false);
+        model.addAttribute("canComment", true);
+        model.addAttribute("commentList", commentList);
+        return "webinfo";
     }
 
-    @RequestMapping("/userpage/addweb")
-    public String addWeb(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-        model.addAttribute("username", theAccountModel.getUsername());
-        return "addweb";
-    }
-
-    @RequestMapping("/addnewweb")
-    public String addNewWeb(@RequestParam(value = "webName", defaultValue = "") String webName,
-            @RequestParam(value = "url", defaultValue = "") String url,
-            @RequestParam(value = "category", defaultValue = "") String category,
-            @RequestParam(value = "description", defaultValue = "") String description,
+    @RequestMapping("/comment")
+    public String comment(@RequestParam(value = "comment", defaultValue = "") String comment,
+            @RequestParam(value = "web", defaultValue = "") Long webId,
+            @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
             Model model, HttpSession session) {
+        WebModel theWebModel = theWebRepository.findById(webId);
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-        model.addAttribute("username", theAccountModel.getUsername());
 
-        WebModel newWebModel = new WebModel(theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, ZonedDateTime.now());
-        if (newWebModel.isValid()) {
-            theWebRepository.save(newWebModel);
-            model.addAttribute("alert", "Add successfully!");
-        } else {
-            model.addAttribute("alert", "Something was wrong!");
-        }
-        return "addweb";
+        CommentModel newComment = CommentModel.newComment(theWebModel, theAccountModel, comment);
+        theCommentRepository.save(newComment);
+
+        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("web", theWebModel);
+        model.addAttribute("canRate", canRate);
+        model.addAttribute("canComment", true);
+        model.addAttribute("commentList", commentList);
+        return "webinfo";
     }
 
-    @RequestMapping("/logoff")
-    public String logOff(Model model, HttpSession session) {
-        session.removeAttribute("user");
-        return "homepage";
+    @RequestMapping("/like")
+    public String like(@RequestParam(value = "comment", defaultValue = "") Long commentId,
+            @RequestParam(value = "web", defaultValue = "") Long webId,
+            @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
+            Model model, HttpSession session) {
+        WebModel theWebModel = theWebRepository.findById(webId);
+        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+
+        CommentModel theCommentModel = theCommentRepository.findById(commentId);
+        theCommentModel.setNumLike(theCommentModel.getNumLike() + 1);
+        theCommentRepository.save(theCommentModel);
+
+        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("web", theWebModel);
+        model.addAttribute("canRate", canRate);
+        model.addAttribute("canComment", true);
+        model.addAttribute("commentList", commentList);
+        return "webinfo";
     }
 }

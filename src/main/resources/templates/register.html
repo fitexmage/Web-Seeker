@@ -6,14 +6,25 @@
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
+            .textField {
+                width: 20%;
+                padding: 10px 5px;
+                margin: 8px 30px;
+                display: inline-block;
+                font-size: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
             #confirm{
-                width:85px;
+                width:100px;
             }
         </style>
     </head>
     <body>
         <div class="cover">
-            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
             <div class="dropdown">
                 <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
                 <div class="dropdown-content">
@@ -31,9 +42,8 @@
         <div class="topnav">
             <a href="/">Home</a>
             <a href="/">Popular</a>
-            <a href="/">Common</a>
             <a href="/">Webest</a>
-            <a href="/">Category</a>
+            <a href="/category">Category</a>
             <form class="search">
                 <input type="text" class="searchBar" placeholder="Search name or tag"/>
                 <input type="submit" class="searchBtn" value="Search"/>
@@ -43,12 +53,12 @@
 
         <h2 align="center">Register</h2>
         <br/>
-        <form action="/register" align="center">
-            Username: <input type='text' name='username'/><br/><br/>
-            Password: <input type='password' name='password'/><br/><br/>
+        <form action="/register/register" align="center">
+            Username: <input type='text' class="textField" name='username'/><br/><br/>
+            Password: <input type='password' class="textField" name='password'/><br/><br/>
             <input id="confirm" type='submit' value='Confirm'/><br/><br/>
             Already have an account?
-            <a href="/loginpage">Sign in</a>
+            <a href="/login">Sign in</a>
             <p style="color:red;" th:text="${alert}"/>
         </form>
         <br/>

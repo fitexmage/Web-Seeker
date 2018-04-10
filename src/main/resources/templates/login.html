@@ -25,7 +25,7 @@
     </head>
     <body>
         <div class="cover">
-            <input type="button" class="login" value="Sign in" onclick="loginPage()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+            <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
             <div class="dropdown">
                 <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
                 <div class="dropdown-content">
@@ -43,9 +43,8 @@
         <div class="topnav">
             <a href="/">Home</a>
             <a href="/">Popular</a>
-            <a href="/">Common</a>
             <a href="/">Webest</a>
-            <a href="/">Category</a>
+            <a href="/category">Category</a>
             <form class="search">
                 <input type="text" class="searchBar" placeholder="Search name or tag"/>
                 <input type="submit" class="searchBtn" value="Search"/>
@@ -55,12 +54,12 @@
 
         <h2 align="center">Sign in</h2>
         <br/>
-        <form action="/login" align="center">
+        <form action="/login/login" align="center">
             Username: <input type='text' class="textField" name='username'/><br/><br/>
             Password: <input type='password' class="textField" name='password'/><br/><br/>
             <input id="submit" type='submit' value='Sign in'/><br/><br/>
             Don't have an account?
-            <a href="/registerpage">Sign up</a>
+            <a href="/register">Sign up</a>
             <br/>
             <p style="color:red;" th:text="${alert}"/>
         </form>
