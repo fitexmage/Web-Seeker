@@ -17,7 +17,7 @@ On the website, users can register an account and use it for login. After login,
 Allow users to register and login, allow users to see and modify their account information, allow users to add information for a new web page on the website, allow users to see lists of web pages in the popular page and access into it to read the information.
 
 ### Project Milestone 2
-Allow users to rate and write reviews for the web pages, allow users to "like" and "dislike" other reviews, store users' exploring history, display the latest created web page on the home page, allow users to explore web by categories and tags for users to choose, and then display and the rank of rating of web page.
+Allow users to rate and write reviews for the web pages, allow users to "like" <del>and "dislike"</del> other reviews, store users' exploring history, display the latest created web page on the home page, allow users to explore web by categories <del>and tags</del> for users to choose, and then display and the rank of rating of web page.
 
 ### Project Milestone 3
 Allow users to use search bar to search for name or tags of web pages, allow users to report or request to modify the web pages, allow users to add friends and recommend web pages to their friends, give users recommendation based on history on the homepage.
