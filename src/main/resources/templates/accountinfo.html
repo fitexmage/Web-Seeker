@@ -56,34 +56,7 @@
         </style>
     </head>
     <body>
-        <div class="cover">
-            <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
-            <div class="dropdown">
-                <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
-                <div class="dropdown-content">
-                    <a href="/userpage">Account</a>
-                    <a href="/logoff">Log off</a>
-                </div>
-            </div>
-            <p class="welcome" th:text="${welcome}"/>
-        </div>
-
-        <div class="header">
-            <h1>Web Seeker</h1>
-        </div>
-
-        <div class="topnav">
-            <a href="/">Home</a>
-            <a href="/">Popular</a>
-            <a href="/">Webest</a>
-            <a href="/category">Category</a>
-            <form class="search">
-                <input type="text" class="searchBar" placeholder="Search name or tag"/>
-                <input type="submit" class="searchBtn" value="Search"/>
-            </form>
-        </div>
-
-        <!-- //////////////////////////////////////////////////////////////////////// -->
+        <div th:replace="header :: header"></div>
 
         <div class="leftnav">
             <ul>
@@ -106,7 +79,6 @@
                 <input type="submit" class="modify" value="Modify" />
             </form>
             <br/>
-            <p>Favorites: 0 webs</p>
             <p>Rate: 0 times</p>
             <p>Comment: 0 times</p>
         </div>

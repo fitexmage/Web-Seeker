@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webseeker.model;
 
 import java.time.ZonedDateTime;
 import javax.persistence.Entity;
@@ -17,37 +17,33 @@ import javax.persistence.ManyToOne;
  * @author fitexmage
  */
 @Entity
-public class CommentModel {
-
+public class ActionModel {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    
     @ManyToOne
     private WebModel web;
 
     @ManyToOne
     private AccountModel poster;
 
-    private String comment;
     private ZonedDateTime postTime;
-    private int numLike;
-
-    public CommentModel(WebModel web, AccountModel poster, String comment, ZonedDateTime postTime, int numLike) {
+    
+    public ActionModel(WebModel web, AccountModel poster, ZonedDateTime postTime){
         this.web = web;
         this.poster = poster;
-        this.comment = comment;
         this.postTime = postTime;
-        this.numLike = numLike;
     }
     
-    public CommentModel(){
+    public ActionModel(){
         
     }
     
-    public static CommentModel newComment(WebModel web, AccountModel poster, String comment){
-        CommentModel newComment = new CommentModel(web, poster, comment, ZonedDateTime.now(), 0);
-        return newComment;
+    public static ActionModel newAction(WebModel web, AccountModel poster){
+        ActionModel newAction = new ActionModel(web, poster, ZonedDateTime.now());
+        return newAction;
     }
 
     /**
@@ -93,20 +89,6 @@ public class CommentModel {
     }
 
     /**
-     * @return the comment
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * @param comment the comment to set
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    /**
      * @return the postTime
      */
     public ZonedDateTime getPostTime() {
@@ -118,19 +100,5 @@ public class CommentModel {
      */
     public void setPostTime(ZonedDateTime postTime) {
         this.postTime = postTime;
-    }
-
-    /**
-     * @return the numLike
-     */
-    public int getNumLike() {
-        return numLike;
-    }
-
-    /**
-     * @param numLike the numLike to set
-     */
-    public void setNumLike(int numLike) {
-        this.numLike = numLike;
     }
 }

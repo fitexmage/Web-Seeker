@@ -1,20 +1,33 @@
-package webseeker;
+package webseeker.controller;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import webseeker.repository.WebRepository;
+import webseeker.repository.RateRepository;
+import webseeker.repository.ActionRepository;
+import webseeker.repository.CommentRepository;
+import webseeker.model.AccountModel;
+import webseeker.model.WebModel;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import webseeker.SecurityService;
+import webseeker.UserService;
 
 @Controller
 public class LoginController {
 
+    public static String error = "";
+
     @Autowired
-    private AccountRepository theAccountRepository;
+    private UserService theUserService;
+
+    @Autowired
+    private SecurityService theSecurityService;
 
     @Autowired
     private WebRepository theWebRepository;
@@ -32,7 +45,7 @@ public class LoginController {
 
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login")
     public String loginPage(Model model, HttpSession session) {
         session.removeAttribute("user");
         return "login";
@@ -42,26 +55,25 @@ public class LoginController {
     public String login(@RequestParam(value = "username", defaultValue = "") String username,
             @RequestParam(value = "password", defaultValue = "") String password,
             Model model, HttpSession session) {
-        AccountModel newAccountModel = new AccountModel(username, password);
-        if (newAccountModel.isValid()) {
-            AccountModel theAccountModel = theAccountRepository.findByUsername(username);
-            if (theAccountModel != null) {
-                if (theAccountModel.getPassword().equals(password)) {
-                    model.addAttribute("username", username);
-                    model.addAttribute("welcome", "Welcome " + username + "!");
-                    session.setAttribute("user", theAccountModel);
-
-                    List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
-                    model.addAttribute("newList", newList);
-                    return "homepage";
-                }
-            }
+        try {
+            theSecurityService.autologin(username, password);
+        } catch (BadCredentialsException e) {
             model.addAttribute("alert", "Username and password do not match!");
             return "login";
-        } else {
-            model.addAttribute("alert", "Please input username and password!");
+        } catch (NullPointerException e) {
+            model.addAttribute("alert", "Please input valid username and password!");
             return "login";
         }
+
+        AccountModel theAccountModel = theUserService.findByUsername(username);
+        model.addAttribute("username", username);
+        model.addAttribute("welcome", "Welcome " + username + "!");
+        session.setAttribute("user", theAccountModel);
+        List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
+        model.addAttribute("newList", newList);
+
+        return "homepage";
+
     }
 
     @RequestMapping("/register")
@@ -76,8 +88,9 @@ public class LoginController {
     ) {
         AccountModel theAccountModel = new AccountModel(username, password);
         if (theAccountModel.isValid()) {
-            if (theAccountRepository.findByUsername(username) == null) {
-                theAccountRepository.save(theAccountModel);
+            if (theUserService.findByUsername(username) == null) {
+                theUserService.save(theAccountModel);
+                theSecurityService.autologin(username, password);
                 model.addAttribute("alert", "Register Successfully!");
                 return "login";
             } else {
@@ -90,7 +103,7 @@ public class LoginController {
         }
     }
 
-    @RequestMapping("/logoff")
+    @RequestMapping("/logout")
     public String logOff(Model model, HttpSession session) {
         session.removeAttribute("user");
 

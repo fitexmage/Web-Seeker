@@ -5,12 +5,15 @@
  */
 package webseeker;
 
-import org.springframework.data.repository.CrudRepository;
+import webseeker.model.AccountModel;
 
 /**
  *
  * @author fitexmage
  */
-public interface ActionRepository extends CrudRepository<ActionModel, Long>{
+public interface UserService {
     
+    public void save(AccountModel theAccountModel);
+    
+    public AccountModel findByUsername(String username);
 }

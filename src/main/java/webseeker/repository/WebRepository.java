@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webseeker.repository;
 
+import webseeker.model.WebModel;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,9 +13,11 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author fitexmage
  */
-public interface CommentRepository extends CrudRepository<CommentModel, Long>{
+public interface WebRepository extends CrudRepository<WebModel, Long>{
     
-    public CommentModel findById(Long id);
+    public WebModel findById(Long id);
     
-    public List<CommentModel> findByWeb(WebModel theWebModel);
+    public List<WebModel> findTop5ByOrderByAddTimeDesc();
+    
+    public List<WebModel> findByCategory(int category);
 }

@@ -1,5 +1,10 @@
-package webseeker;
+package webseeker.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import webseeker.repository.*;
+import webseeker.model.*;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +47,48 @@ public class MainController {
     }
 
     @RequestMapping("/category")
-    public String category(@RequestParam(value = "category", defaultValue = "") int category,
-            Model model) {
+    public String category(@RequestParam(value = "category", defaultValue = "1") int category,
+            Model model, HttpSession session) {
+
+        if (session.getAttribute("user") != null) {
+            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+            model.addAttribute("username", theAccountModel.getUsername());
+        }
+
+        List<WebModel> webList = theWebRepository.findByCategory(category);
+
+        if (!webList.isEmpty()) {
+            Collections.sort(webList, new Comparator<WebModel>() {
+
+                @Override
+                public int compare(WebModel o1, WebModel o2) {
+                    double i = o1.rate() - o2.rate();
+                    if (i > 0) {
+                        return -1;
+                    } else if (i == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+
+            ArrayList<WebModel> highList = new ArrayList<WebModel>();
+            int num;
+            if (webList.size() > 10) {
+                num = 10;
+            } else {
+                num = webList.size();
+            }
+
+            for (int i = 0; i < num; i++) {
+                highList.add(webList.get(i));
+            }
+            if (!highList.isEmpty()) {
+                model.addAttribute("webList", highList);
+            }
+        }
+        model.addAttribute("category", WebModel.categoryToString(category) + " Website");
         return "category";
     }
 
@@ -138,7 +183,7 @@ public class MainController {
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
 
         CommentModel theCommentModel = theCommentRepository.findById(commentId);
-        theCommentModel.setNumLike(theCommentModel.getNumLike() + 1);
+        theCommentModel.setLikeNum(theCommentModel.getLikeNum() + 1);
         theCommentRepository.save(theCommentModel);
 
         List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);

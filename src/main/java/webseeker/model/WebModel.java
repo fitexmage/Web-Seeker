@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webseeker.model;
 
 import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
@@ -83,7 +83,7 @@ public class WebModel {
         return 0;
     }
 
-    public String categoryToString() {
+    public static String categoryToString(int category) {
         if (category == 1) {
             return "Portal";
         } else if (category == 2) {
@@ -104,12 +104,20 @@ public class WebModel {
         return "";
     }
 
-    public String rate() {
+    public String rateInString() {
         DecimalFormat df = new DecimalFormat("#.0");
         if (totalScore != 0) {
             return df.format((double) totalScore / (double) rater);
         } else {
             return "0";
+        }
+    }
+
+    public double rate() {
+        if (totalScore != 0) {
+            return (double) totalScore / (double) rater;
+        } else {
+            return 0;
         }
     }
 

@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webseeker.model;
 
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -22,6 +24,9 @@ public class AccountModel {
     
     private String username;
     private String password;
+    
+    @ManyToMany
+    private Set<RoleModel> roles;
     
     public AccountModel(String username, String password) {
         this.username = username;
@@ -82,5 +87,19 @@ public class AccountModel {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the roles
+     */
+    public Set<RoleModel> getRoles() {
+        return roles;
+    }
+
+    /**
+     * @param roles the roles to set
+     */
+    public void setRoles(Set<RoleModel> roles) {
+        this.roles = roles;
     }
 }

@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webseeker.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
-
-import webseeker.AccountModel;
+import webseeker.model.RoleModel;
 
 /**
  *
  * @author fitexmage
  */
-public interface AccountRepository extends CrudRepository<AccountModel, Long>{
-    
-    public AccountModel findByUsername(String username);
+public interface RoleRepository extends CrudRepository<RoleModel, Long>{
     
 }
