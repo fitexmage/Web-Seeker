@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head> 
-        <title>Home Page</title>
+        <title>Web Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
@@ -49,13 +49,13 @@
     </head>
     <body>
         <div th:replace="header :: header"></div>
-        
+
         <h2 align='center' th:text="${web.getWebName()}"></h2><br/>
         <div class="info">
             <ul>
                 <li><p th:text="${'Web Name: ' + web.getWebName()}"/></li>
                 <li>URL: <a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank" /></li>
-                <li><p th:text="${'Category: ' + web.categoryToString()}"/></li>
+                <li><p th:text="${'Category: ' + web.categoryToString(web.getCategory())}"/></li>
                 <li><p th:text="${'Average Rate: ' + web.rateInString() + ' (' + web.getRater() + ' people rated)'}"/></li>
                 <li th:if="${canRate}">
                     <form action="/rate">
@@ -70,10 +70,10 @@
                         <input type="submit" value="Rate" />
                     </form>
                 </li>
-                <li><p th:text="${'Description: ' + web.getDescription()}"/></li>
+                <li><p th:text="'Description: ' + (${web.getDescription() == null} ? '' : ${web.getDescription()})"/></li>
             </ul>
             <br/>
-            <p th:if="${!canComment}">Login to see the comments!</p>
+            <p style="color:red;" th:if="${!canComment}">Login to see the comments!</p>
 
             <div th:if="${canComment}">
                 <div>
@@ -105,6 +105,7 @@
                 </div>
             </div>
         </div>
+        <br/><br/><br/>
         <div class="footer">
             <p>Footer</p>
         </div>

@@ -1,12 +1,7 @@
 package webseeker.controller;
 
-import webseeker.repository.WebRepository;
-import webseeker.repository.RateRepository;
-import webseeker.repository.ActionRepository;
-import webseeker.repository.CommentRepository;
-import webseeker.repository.AccountRepository;
-import webseeker.model.AccountModel;
-import webseeker.model.WebModel;
+import webseeker.repository.*;
+import webseeker.model.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +37,22 @@ public class UserController {
     @RequestMapping("/userpage")
     public String userPage(Model model, HttpSession session) {
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
+        List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
         model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("rateNum", rateList.size());
+        model.addAttribute("commentNum", commentList.size());
         return "accountinfo";
     }
 
     @RequestMapping("/userpage/accountinfo")
     public String accountInfo(Model model, HttpSession session) {
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
+        List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
         model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("rateNum", rateList.size());
+        model.addAttribute("commentNum", commentList.size());
         return "accountinfo";
     }
 

@@ -17,5 +17,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface RateRepository extends CrudRepository<RateModel, Long>{
     
+    public List<RateModel> findByRater(AccountModel theAccountModel);
+    
     public RateModel findByWebAndRater(WebModel theWebModel, AccountModel theAccountModel);
 }

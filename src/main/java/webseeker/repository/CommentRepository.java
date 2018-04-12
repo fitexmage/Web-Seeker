@@ -5,8 +5,7 @@
  */
 package webseeker.repository;
 
-import webseeker.model.WebModel;
-import webseeker.model.CommentModel;
+import webseeker.model.*;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
@@ -19,4 +18,6 @@ public interface CommentRepository extends CrudRepository<CommentModel, Long>{
     public CommentModel findById(Long id);
     
     public List<CommentModel> findByWeb(WebModel theWebModel);
+    
+    public List<CommentModel> findByPoster(AccountModel theAccountModel);
 }

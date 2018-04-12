@@ -3,9 +3,11 @@ package webseeker.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import webseeker.repository.*;
 import webseeker.model.*;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +47,40 @@ public class MainController {
         model.addAttribute("newList", newList);
         return "homepage";
     }
+    
+    @RequestMapping("/popular")
+    public String popular(Model model, HttpSession session){
+        
+        List<ActionModel> actionList = (List)theActionRepository.findAll();
+        HashMap<Long, Integer> webVisitMap = new HashMap<Long, Integer>();
+        for(ActionModel theActionModel: actionList){
+            Long webId = theActionModel.getWeb().getId();
+            if(webVisitMap.containsKey(webId)){
+                webVisitMap.put(webId, webVisitMap.get(webId) + 1);
+            }else{
+                webVisitMap.put(theActionModel.getWeb().getId(), 1);
+            }
+        }
+        
+        ArrayList<WebModel> decsendingWebVisitList = new ArrayList<WebModel>();
+        int webNum = 0;
+        List<Map.Entry<Long, Integer>> webVisitList = new ArrayList<Map.Entry<Long, Integer>>(webVisitMap.entrySet());
+        Collections.sort(webVisitList, new Comparator<Map.Entry<Long, Integer>>() {
+            public int compare(Map.Entry<Long, Integer> o1, Map.Entry<Long, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for (Map.Entry<Long, Integer> mapping : webVisitList) {
+            if (webNum < 10) {
+                decsendingWebVisitList.add(theWebRepository.findById(mapping.getKey()));
+            }
+            webNum++;
+        }
+        
+        model.addAttribute("webList", decsendingWebVisitList);
+        
+        return "popular";
+    }
 
     @RequestMapping("/category")
     public String category(@RequestParam(value = "category", defaultValue = "1") int category,
@@ -56,7 +92,6 @@ public class MainController {
         }
 
         List<WebModel> webList = theWebRepository.findByCategory(category);
-
         if (!webList.isEmpty()) {
             Collections.sort(webList, new Comparator<WebModel>() {
 
@@ -74,21 +109,21 @@ public class MainController {
             });
 
             ArrayList<WebModel> highList = new ArrayList<WebModel>();
-            int num;
+            int webNum;
             if (webList.size() > 10) {
-                num = 10;
+                webNum = 10;
             } else {
-                num = webList.size();
+                webNum = webList.size();
             }
 
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < webNum; i++) {
                 highList.add(webList.get(i));
             }
             if (!highList.isEmpty()) {
                 model.addAttribute("webList", highList);
             }
         }
-        model.addAttribute("category", WebModel.categoryToString(category) + " Website");
+        model.addAttribute("category", WebModel.categoryToString(category) + " Website Rank");
         return "category";
     }
 

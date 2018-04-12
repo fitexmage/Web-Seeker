@@ -1,11 +1,7 @@
 package webseeker.controller;
 
-import webseeker.repository.WebRepository;
-import webseeker.repository.RateRepository;
-import webseeker.repository.ActionRepository;
-import webseeker.repository.CommentRepository;
-import webseeker.model.AccountModel;
-import webseeker.model.WebModel;
+import webseeker.repository.*;
+import webseeker.model.*;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +9,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import webseeker.SecurityService;
-import webseeker.UserService;
+import webseeker.service.SecurityService;
+import webseeker.service.UserService;
 
 @Controller
 public class LoginController {
@@ -69,6 +64,7 @@ public class LoginController {
         model.addAttribute("username", username);
         model.addAttribute("welcome", "Welcome " + username + "!");
         session.setAttribute("user", theAccountModel);
+        session.setMaxInactiveInterval(3600);
         List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
 

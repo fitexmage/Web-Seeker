@@ -1,39 +1,13 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head> 
-        <title>Category Page</title>
+        <title>Popular Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
-            .leftnav {
-                float: left;
-                width: 15%;
-                height: 1000px;
-                margin-left: 5%;
-                font-size: 13pt;
-            }
-
-            ul {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                background-color: #f1f1f1;
-            }
-
-            li a {
-                display: block;
-                color: #000;
-                padding: 8px 16px;
-                text-decoration: none;
-            }
-
-            li a:hover {
-                background-color: #555;
-                color: white;
-            }
-            
-            .main{
+            .main {
                 padding: 15px;
                 text-align: center;
             }
@@ -62,48 +36,32 @@
                 color:#000000;
                 background-color:#EAF2D3;
             }
-
-            .rightnav {
-                float: right;
-                width: 20%;
-                height: 1000px;
-            }
         </style>
     </head>
     <body>
         <div th:replace="header :: header"></div>
 
-        <div class="leftnav">
-            <ul>
-                <li><a href="/category?category=1">Portal</a></li>
-                <li><a href="/category?category=2">E-commerce</a></li>
-                <li><a href="/category?category=3">Service</a></li>
-                <li><a href="/category?category=4">Media</a></li>
-                <li><a href="/category?category=5">Corporate</a></li>
-                <li><a href="/category?category=6">Education</a></li>
-                <li><a href="/category?category=7">Personal</a></li>
-                <li><a href="/category?category=8">Other</a></li>
-            </ul>
-        </div>
-
         <div class="main">
-            <h2 th:text="${category}"></h2>
+            <h2>The Most Popular Website</h2>
             <table class="webList" align="center">
                 <tr>
                     <th>Rank</th>
                     <th>Web name</th>
                     <th>URL</th>
+                    <th>Category</th>
                     <th>Detail</th>
                 </tr>
                 <tr th:each="web, webStat: ${webList}">
-                    <td th:text="${webStat.index + 1}" />
+                    <td th:text="${webStat.index + 1}"/>
                     <td th:text="${web.getWebName()}"/>
                     <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
+                    <td th:text="${web.categoryToString(web.getCategory())}"/>
                     <td><a th:href="@{'/getwebinfo?webId=' + ${web.getId()}}">Enter</a></td>
                 </tr>
             </table>
         </div>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/>
+
         <div class="footer">
             <p>Footer</p>
         </div>
