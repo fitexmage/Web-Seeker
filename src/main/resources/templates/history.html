@@ -33,19 +33,35 @@
                 color: white;
             }
 
-            .accountInfo {
+            .history {
                 text-align: center;
             }
 
-            .textField {
-                width: 15%;
-                padding: 10px 5px;
-                margin: 8px 30px;
-                display: inline-block;
-                font-size: 15px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
+            .actionList {
+                margin:auto;
+                width: 50%;
+                border-collapse:collapse;
+            }
+
+            .actionList td, .actionList th 
+            {
+                border:1px solid #98bf21;
+                padding:10px 20px 10px 20px;
+            }
+
+            .actionList th 
+            {
+                font-size:1.1em;
+                padding-top:5px;
+                padding-bottom:4px;
+                background-color:#A7C942;
+                color:#ffffff;
+            }
+
+            .actionList tr.alt td 
+            {
+                color:#000000;
+                background-color:#EAF2D3;
             }
 
             .rightnav {
@@ -71,18 +87,26 @@
         <div class="rightnav"></div>
 
         <br/>
-        <div class="accountInfo">
-            <h2>Account Information</h2>
-            <form action="/userpage/modifyinfo">
-                Username<input type="text" class="textField" name="username" th:value="${username}" /><br/>
-                <p style="color:red;" th:text="${alert}"/>
-                <input type="submit" class="modify" value="Modify" />
-            </form>
-            <br/>
-            <div>
-                <p th:text="'Rated ' + ${rateNum} + ' webs'" />
-                <p th:text="'Posted ' + ${commentNum} + ' comments'" />
-            </div>
+        <div class="history">
+            <h2>History</h2>
+            <table class="actionList">
+                <tr>
+                    <th>Web Name</th>
+                    <th>Visit Time</th>
+                    <th>Delete</th>
+                </tr>
+                <tr th:each="action: ${actionList}">
+                    <td th:text="${action.getWeb().getWebName()}"></td>
+                    <td th:text="${action.getVisitTime().toLocalDate()} + ' ' + ${action.getVisitTime().toLocalTime().withNano(0)}"></td>
+                    <td>
+                        <form action="deleteaction">
+                            <input type="hidden" name="action" th:value="${action.getId()}" />
+                            <input type="submit" value="Delete" />
+                        </form>
+                    </td>
+                </tr>
+            </table>
+
         </div>
         <br/><br/><br/><br/><br/>
         <div th:replace="footer :: footer"></div>

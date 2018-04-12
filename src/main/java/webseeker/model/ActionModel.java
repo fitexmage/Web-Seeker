@@ -27,14 +27,14 @@ public class ActionModel {
     private WebModel web;
 
     @ManyToOne
-    private AccountModel poster;
+    private AccountModel visiter;
 
-    private ZonedDateTime postTime;
+    private ZonedDateTime visitTime;
     
-    public ActionModel(WebModel web, AccountModel poster, ZonedDateTime postTime){
+    public ActionModel(WebModel web, AccountModel visiter, ZonedDateTime visitTime){
         this.web = web;
-        this.poster = poster;
-        this.postTime = postTime;
+        this.visiter = visiter;
+        this.visitTime = visitTime;
     }
     
     public ActionModel(){
@@ -75,30 +75,30 @@ public class ActionModel {
     }
 
     /**
-     * @return the poster
+     * @return the visiter
      */
-    public AccountModel getPoster() {
-        return poster;
+    public AccountModel getVisiter() {
+        return visiter;
     }
 
     /**
-     * @param poster the poster to set
+     * @param visiter the visiter to set
      */
-    public void setPoster(AccountModel poster) {
-        this.poster = poster;
+    public void setVisiter(AccountModel visiter) {
+        this.visiter = visiter;
     }
 
     /**
-     * @return the postTime
+     * @return the visitTime
      */
-    public ZonedDateTime getPostTime() {
-        return postTime;
+    public ZonedDateTime getVisitTime() {
+        return visitTime;
     }
 
     /**
-     * @param postTime the postTime to set
+     * @param visitTime the visitTime to set
      */
-    public void setPostTime(ZonedDateTime postTime) {
-        this.postTime = postTime;
+    public void setVisitTime(ZonedDateTime visitTime) {
+        this.visitTime = visitTime;
     }
 }

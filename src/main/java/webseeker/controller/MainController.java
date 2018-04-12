@@ -47,21 +47,26 @@ public class MainController {
         model.addAttribute("newList", newList);
         return "homepage";
     }
-    
+
     @RequestMapping("/popular")
-    public String popular(Model model, HttpSession session){
-        
-        List<ActionModel> actionList = (List)theActionRepository.findAll();
+    public String popular(Model model, HttpSession session) {
+
+        if (session.getAttribute("user") != null) {
+            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+            model.addAttribute("username", theAccountModel.getUsername());
+        }
+
+        List<ActionModel> actionList = (List) theActionRepository.findAll();
         HashMap<Long, Integer> webVisitMap = new HashMap<Long, Integer>();
-        for(ActionModel theActionModel: actionList){
+        for (ActionModel theActionModel : actionList) {
             Long webId = theActionModel.getWeb().getId();
-            if(webVisitMap.containsKey(webId)){
+            if (webVisitMap.containsKey(webId)) {
                 webVisitMap.put(webId, webVisitMap.get(webId) + 1);
-            }else{
+            } else {
                 webVisitMap.put(theActionModel.getWeb().getId(), 1);
             }
         }
-        
+
         ArrayList<WebModel> decsendingWebVisitList = new ArrayList<WebModel>();
         int webNum = 0;
         List<Map.Entry<Long, Integer>> webVisitList = new ArrayList<Map.Entry<Long, Integer>>(webVisitMap.entrySet());
@@ -71,14 +76,14 @@ public class MainController {
             }
         });
         for (Map.Entry<Long, Integer> mapping : webVisitList) {
-            if (webNum < 10) {
+            if (webNum < 20) {
                 decsendingWebVisitList.add(theWebRepository.findById(mapping.getKey()));
             }
             webNum++;
         }
-        
+
         model.addAttribute("webList", decsendingWebVisitList);
-        
+
         return "popular";
     }
 
@@ -94,7 +99,6 @@ public class MainController {
         List<WebModel> webList = theWebRepository.findByCategory(category);
         if (!webList.isEmpty()) {
             Collections.sort(webList, new Comparator<WebModel>() {
-
                 @Override
                 public int compare(WebModel o1, WebModel o2) {
                     double i = o1.rate() - o2.rate();
@@ -110,8 +114,8 @@ public class MainController {
 
             ArrayList<WebModel> highList = new ArrayList<WebModel>();
             int webNum;
-            if (webList.size() > 10) {
-                webNum = 10;
+            if (webList.size() > 20) {
+                webNum = 20;
             } else {
                 webNum = webList.size();
             }
@@ -127,8 +131,8 @@ public class MainController {
         return "category";
     }
 
-    @RequestMapping("/getwebinfo")
-    public String getWebInfo(@RequestParam(value = "webId", defaultValue = "") Long webId,
+    @RequestMapping("/webinfo")
+    public String webInfo(@RequestParam(value = "webId", defaultValue = "") Long webId,
             Model model, HttpSession session) {
         WebModel theWebModel = theWebRepository.findById(webId);
 
@@ -161,7 +165,7 @@ public class MainController {
         return "webinfo";
     }
 
-    @RequestMapping("/rate")
+    @RequestMapping("/webinfo/rate")
     public String rate(@RequestParam(value = "score", defaultValue = "") String score,
             @RequestParam(value = "web", defaultValue = "") Long webId,
             Model model, HttpSession session) {
@@ -188,7 +192,7 @@ public class MainController {
         return "webinfo";
     }
 
-    @RequestMapping("/comment")
+    @RequestMapping("/webinfo/comment")
     public String comment(@RequestParam(value = "comment", defaultValue = "") String comment,
             @RequestParam(value = "web", defaultValue = "") Long webId,
             @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
@@ -209,7 +213,7 @@ public class MainController {
         return "webinfo";
     }
 
-    @RequestMapping("/like")
+    @RequestMapping("/webinfo/like")
     public String like(@RequestParam(value = "comment", defaultValue = "") Long commentId,
             @RequestParam(value = "web", defaultValue = "") Long webId,
             @RequestParam(value = "canRate", defaultValue = "") boolean canRate,

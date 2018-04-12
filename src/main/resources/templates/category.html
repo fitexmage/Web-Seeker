@@ -33,7 +33,7 @@
                 color: white;
             }
             
-            .main{
+            .category{
                 padding: 15px;
                 text-align: center;
             }
@@ -45,7 +45,7 @@
             .webList td, .webList th 
             {
                 border:1px solid #98bf21;
-                padding:3px 7px 2px 7px;
+                padding:10px 20px 10px 20px;
             }
 
             .webList th 
@@ -86,12 +86,12 @@
             </ul>
         </div>
 
-        <div class="main">
+        <div class="category">
             <h2 th:text="${category}"></h2>
             <table class="webList" align="center">
                 <tr>
                     <th>Rank</th>
-                    <th>Web name</th>
+                    <th>Web Name</th>
                     <th>URL</th>
                     <th>Detail</th>
                 </tr>
@@ -99,13 +99,11 @@
                     <td th:text="${webStat.index + 1}" />
                     <td th:text="${web.getWebName()}"/>
                     <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
-                    <td><a th:href="@{'/getwebinfo?webId=' + ${web.getId()}}">Enter</a></td>
+                    <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}">Enter</a></td>
                 </tr>
             </table>
         </div>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        <div class="footer">
-            <p>Footer</p>
-        </div>
+        <div th:replace="footer :: footer"></div>
     </body>
 </html>

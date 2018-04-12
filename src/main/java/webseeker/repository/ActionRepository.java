@@ -5,8 +5,10 @@
  */
 package webseeker.repository;
 
+import java.util.List;
 import webseeker.model.ActionModel;
 import org.springframework.data.repository.CrudRepository;
+import webseeker.model.AccountModel;
 
 /**
  *
@@ -14,4 +16,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ActionRepository extends CrudRepository<ActionModel, Long>{
     
+    public List<ActionModel> findByVisiter(AccountModel theAccountModel);
+
 }

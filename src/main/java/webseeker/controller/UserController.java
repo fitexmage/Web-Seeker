@@ -4,6 +4,7 @@ import webseeker.repository.*;
 import webseeker.model.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserController {
 
     @Autowired
     private CommentRepository theCommentRepository;
-    
+
     @Autowired
     private ActionRepository theActionRepository;
 
@@ -73,6 +74,11 @@ public class UserController {
         return "accountinfo";
     }
 
+    @RequestMapping("/userpage/favorites")
+    public String favorites(Model model, HttpSession session) {
+        return "homepage";
+    }
+
     @RequestMapping("/userpage/addweb")
     public String addWeb(Model model, HttpSession session) {
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
@@ -88,14 +94,51 @@ public class UserController {
             Model model, HttpSession session) {
         AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
         model.addAttribute("username", theAccountModel.getUsername());
-
-        WebModel newWebModel = WebModel.newWeb(theAccountModel, webName, url, category, description);
-        if (newWebModel.isValid()) {
-            theWebRepository.save(newWebModel);
-            model.addAttribute("alert", "Add successfully!");
+        WebModel theWebModel = theWebRepository.findByUrl(url);
+        if (theWebModel == null) {
+            WebModel newWebModel = WebModel.newWeb(theAccountModel, webName, url, category, description);
+            if (newWebModel.isValid()) {
+                theWebRepository.save(newWebModel);
+                model.addAttribute("alert", "Add successfully!");
+            } else {
+                model.addAttribute("alert", "Web name and URL should not be empty!");
+            }
         } else {
-            model.addAttribute("alert", "Something was wrong!");
+            model.addAttribute("alert", "URL already exists!");
         }
         return "addweb";
+    }
+
+    @RequestMapping("/userpage/history")
+    public String history(Model model, HttpSession session) {
+        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
+        Collections.reverse(actionList);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("actionList", actionList);
+
+        return "history";
+    }
+
+    @RequestMapping("/userpage/deleteaction")
+    public String delectAction(@RequestParam(value = "action", defaultValue = "") Long action,
+            Model model, HttpSession session) {
+
+        theActionRepository.delete(action);
+
+        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
+        Collections.reverse(actionList);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("actionList", actionList);
+
+        return "history";
+    }
+
+    @RequestMapping("/userpage/setting")
+    public String setting(Model model, HttpSession session) {
+        return "homepage";
     }
 }

@@ -39,7 +39,6 @@
             }
 
             .webTable {
-                width: 50%;
                 text-align: right;
             }
 
@@ -84,7 +83,7 @@
             <ul>
                 <li><a href="/userpage/accountinfo">Account</a></li>
                 <li><a href="/userpage/favorites">Favorites</a></li>
-                <li><a href="/userpage/addweb">Add new web</a></li>
+                <li><a href="/userpage/addweb">Add new web page</a></li>
                 <li><a href="/userpage/history">History</a></li>
                 <li><a href="/userpage/setting">Setting</a></li>
             </ul>
@@ -94,7 +93,7 @@
         
         <br/>
         <div class="addWeb">
-            <h2>Add new web</h2>
+            <h2>Add the web page you like!</h2>
             <form action="/userpage/addnewweb">
                 <table class="webTable" align="center" cellspacing="10">
                     <tr>
@@ -131,8 +130,6 @@
             </form>
         </div>
         <br/><br/><br/><br/><br/>
-        <div class="footer">
-            <p>Footer</p>
-        </div>
+        <div th:replace="footer :: footer"></div>
     </body>
 </html>

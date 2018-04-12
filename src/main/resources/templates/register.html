@@ -36,9 +36,6 @@
             <p style="color:red;" th:text="${alert}"/>
         </form>
         <br/>
-
-        <div class="footer">
-            <p>Footer</p>
-        </div>
+        <div th:replace="footer :: footer"></div>
     </body>
 </html>

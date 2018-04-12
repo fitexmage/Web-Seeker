@@ -31,7 +31,7 @@
             .recommendation td, .recommendation th 
             {
                 border:1px solid #98bf21;
-                padding:3px 7px 2px 7px;
+                padding:10px 20px 10px 20px;
             }
 
             .recommendation th 
@@ -56,7 +56,7 @@
             .new td, .new th 
             {
                 border:1px solid #98bf21;
-                padding:3px 7px 2px 7px;
+                padding:10px 20px 10px 20px;
             }
 
             .new th 
@@ -83,7 +83,7 @@
                 <h2>Web you may like</h2>
                 <table class="recommendation" align="center">
                     <tr>
-                        <th>Web name</th>
+                        <th>Web Name</th>
                         <th>URL</th>
                         <th>Category</th>
                         <th>Detail</th>
@@ -92,7 +92,7 @@
                         <td th:text="${web.getWebName()}"/>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
-                        <td><a th:href="@{'/getwebinfo?webId=' + ${web.getId()}}">Enter</a></td>
+                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}">Enter</a></td>
                     </tr>
                 </table>
             </div>
@@ -111,15 +111,12 @@
                         <td th:text="${web.getWebName()}"/>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
-                        <td><a th:href="@{'/getwebinfo?webId=' + ${web.getId()}}">Enter</a></td>
+                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}">Enter</a></td>
                     </tr>
                 </table>
             </div>
         </div>
-        <br/><br/>
-
-        <div class="footer">
-            <p>Footer</p>
-        </div>
+        <br/><br/><br/>
+        <div th:replace="footer :: footer"></div>
     </body>
 </html>
