@@ -19,7 +19,9 @@ public interface WebRepository extends CrudRepository<WebModel, Long>{
     
     public WebModel findByUrl(String url);
     
-    public List<WebModel> findTop5ByOrderByAddTimeDesc();
+    public List<WebModel> findTop10ByOrderByAddTimeDesc();
+    
+    public List<WebModel> findTop1000ByOrderByAddTimeDesc();
     
     public List<WebModel> findByCategory(int category);
 }

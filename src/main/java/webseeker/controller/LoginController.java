@@ -65,7 +65,7 @@ public class LoginController {
         model.addAttribute("welcome", "Welcome " + username + "!");
         session.setAttribute("user", theAccountModel);
         session.setMaxInactiveInterval(3600);
-        List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
+        List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
 
         return "homepage";
@@ -103,7 +103,7 @@ public class LoginController {
     public String logOff(Model model, HttpSession session) {
         session.removeAttribute("user");
 
-        List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
+        List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
         return "homepage";
     }

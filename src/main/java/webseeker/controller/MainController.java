@@ -43,7 +43,7 @@ public class MainController {
             AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
             model.addAttribute("username", theAccountModel.getUsername());
         }
-        List<WebModel> newList = theWebRepository.findTop5ByOrderByAddTimeDesc();
+        List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
         return "homepage";
     }

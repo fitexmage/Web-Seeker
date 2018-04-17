@@ -34,21 +34,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                //.antMatchers("/*.css").permitAll()
-                //.antMatchers("/*.js").permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login/login")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("logout")
-                .permitAll()
-                .and()
-                .csrf();
+//        http
+//                .authorizeRequests()
+//                //.antMatchers("/*.css").permitAll()
+//                //.antMatchers("/*.js").permitAll()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .loginProcessingUrl("/login/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .logoutUrl("logout")
+//                .permitAll()
+//                .and()
+//                .csrf();
     }
 
     @Override

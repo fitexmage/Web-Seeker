@@ -83,16 +83,15 @@
                 <h2>Web you may like</h2>
                 <table class="recommendation" align="center">
                     <tr>
-                        <th>Web Name</th>
+                        <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
                         <th>Detail</th>
                     </tr>
                     <tr th:each="web: ${webList}">
-                        <td th:text="${web.getWebName()}"/>
+                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
-                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}">Enter</a></td>
                     </tr>
                 </table>
             </div>
@@ -102,16 +101,14 @@
                 <h2>Find new added web</h2>
                 <table class="new" align="center" border="1">
                     <tr>
-                        <th>Web name</th>
+                        <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
-                        <th>Detail</th>
                     </tr>
                     <tr th:each="web: ${newList}">
-                        <td th:text="${web.getWebName()}"/>
+                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
-                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}">Enter</a></td>
                     </tr>
                 </table>
             </div>
