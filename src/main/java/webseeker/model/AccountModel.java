@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 /**
@@ -24,13 +26,16 @@ public class AccountModel {
     
     private String username;
     private String password;
+    private int enabled;
     
     @ManyToMany
+    @JoinTable(name = "account_model_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleModel> roles;
     
-    public AccountModel(String username, String password) {
+    public AccountModel(String username, String password, int enabled) {
         this.username = username;
         this.password = password;
+        this.enabled = enabled;
     }
     
     public AccountModel(){
@@ -87,6 +92,20 @@ public class AccountModel {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the enabled
+     */
+    public int getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
     /**

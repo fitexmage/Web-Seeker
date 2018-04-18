@@ -2,12 +2,11 @@ package webseeker.controller;
 
 import webseeker.repository.*;
 import webseeker.model.*;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +35,9 @@ public class UserController {
     }
 
     @RequestMapping("/userpage")
-    public String userPage(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+    public String userPage(Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
         List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
         model.addAttribute("username", theAccountModel.getUsername());
@@ -47,8 +47,9 @@ public class UserController {
     }
 
     @RequestMapping("/userpage/accountinfo")
-    public String accountInfo(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+    public String accountInfo(Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
         List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
         model.addAttribute("username", theAccountModel.getUsername());
@@ -59,8 +60,9 @@ public class UserController {
 
     @RequestMapping("/userpage/modifyinfo")
     public String modifyInfo(@RequestParam(value = "username", defaultValue = "") String username,
-            Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+            Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
 
         if (!username.equals("")) {
             theAccountModel.setUsername(username);
@@ -75,13 +77,14 @@ public class UserController {
     }
 
     @RequestMapping("/userpage/favorites")
-    public String favorites(Model model, HttpSession session) {
+    public String favorites(Model model) {
         return "homepage";
     }
 
     @RequestMapping("/userpage/addweb")
-    public String addWeb(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+    public String addWeb(Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         model.addAttribute("username", theAccountModel.getUsername());
         return "addweb";
     }
@@ -91,9 +94,11 @@ public class UserController {
             @RequestParam(value = "url", defaultValue = "") String url,
             @RequestParam(value = "category", defaultValue = "") String category,
             @RequestParam(value = "description", defaultValue = "") String description,
-            Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+            Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         model.addAttribute("username", theAccountModel.getUsername());
+        
         WebModel theWebModel = theWebRepository.findByUrl(url);
         if (theWebModel == null) {
             WebModel newWebModel = WebModel.newWeb(theAccountModel, webName, url, category, description);
@@ -110,8 +115,9 @@ public class UserController {
     }
 
     @RequestMapping("/userpage/history")
-    public String history(Model model, HttpSession session) {
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+    public String history(Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
         Collections.reverse(actionList);
 
@@ -123,11 +129,12 @@ public class UserController {
 
     @RequestMapping("/userpage/deleteaction")
     public String delectAction(@RequestParam(value = "action", defaultValue = "") Long action,
-            Model model, HttpSession session) {
+            Model model) {
 
         theActionRepository.delete(action);
 
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
         Collections.reverse(actionList);
 
@@ -138,7 +145,7 @@ public class UserController {
     }
 
     @RequestMapping("/userpage/setting")
-    public String setting(Model model, HttpSession session) {
+    public String setting(Model model) {
         return "homepage";
     }
 }

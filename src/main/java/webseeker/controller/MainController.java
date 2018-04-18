@@ -8,8 +8,11 @@ import webseeker.repository.*;
 import webseeker.model.*;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,22 +41,25 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String homepage(Model model, HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-            model.addAttribute("username", theAccountModel.getUsername());
+    public String homepage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
         }
+
         List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
         return "homepage";
     }
 
     @RequestMapping("/popular")
-    public String popular(Model model, HttpSession session) {
+    public String popular(Model model) {
 
-        if (session.getAttribute("user") != null) {
-            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-            model.addAttribute("username", theAccountModel.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
         }
 
         List<ActionModel> actionList = (List) theActionRepository.findAll();
@@ -89,11 +95,12 @@ public class MainController {
 
     @RequestMapping("/category")
     public String category(@RequestParam(value = "category", defaultValue = "1") int category,
-            Model model, HttpSession session) {
+            Model model) {
 
-        if (session.getAttribute("user") != null) {
-            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-            model.addAttribute("username", theAccountModel.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
         }
 
         List<WebModel> webList = theWebRepository.findByCategory(category);
@@ -133,17 +140,19 @@ public class MainController {
 
     @RequestMapping("/webinfo")
     public String webInfo(@RequestParam(value = "webId", defaultValue = "") Long webId,
-            Model model, HttpSession session) {
+            Model model) {
         WebModel theWebModel = theWebRepository.findById(webId);
 
         RateModel theRateModel = null;
         boolean canRate = false;
         boolean canComment = false;
 
-        if (session.getAttribute("user") != null) {
-            AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
-            model.addAttribute("username", theAccountModel.getUsername());
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
+            
+            AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
             theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
             canRate = true;
             canComment = true;
@@ -168,9 +177,10 @@ public class MainController {
     @RequestMapping("/webinfo/rate")
     public String rate(@RequestParam(value = "score", defaultValue = "") String score,
             @RequestParam(value = "web", defaultValue = "") Long webId,
-            Model model, HttpSession session) {
+            Model model) {
         WebModel theWebModel = theWebRepository.findById(webId);
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
         if (theRateModel == null) {
@@ -196,9 +206,10 @@ public class MainController {
     public String comment(@RequestParam(value = "comment", defaultValue = "") String comment,
             @RequestParam(value = "web", defaultValue = "") Long webId,
             @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
-            Model model, HttpSession session) {
+            Model model) {
         WebModel theWebModel = theWebRepository.findById(webId);
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
 
         CommentModel newComment = CommentModel.newComment(theWebModel, theAccountModel, comment);
         theCommentRepository.save(newComment);
@@ -217,9 +228,10 @@ public class MainController {
     public String like(@RequestParam(value = "comment", defaultValue = "") Long commentId,
             @RequestParam(value = "web", defaultValue = "") Long webId,
             @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
-            Model model, HttpSession session) {
+            Model model) {
         WebModel theWebModel = theWebRepository.findById(webId);
-        AccountModel theAccountModel = (AccountModel) session.getAttribute("user");
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
 
         CommentModel theCommentModel = theCommentRepository.findById(commentId);
         theCommentModel.setLikeNum(theCommentModel.getLikeNum() + 1);
