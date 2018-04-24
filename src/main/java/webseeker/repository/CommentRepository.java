@@ -17,7 +17,7 @@ public interface CommentRepository extends CrudRepository<CommentModel, Long>{
     
     public CommentModel findById(Long id);
     
-    public List<CommentModel> findByWeb(WebModel theWebModel);
+    public List<CommentModel> findByWebOrderByPostTimeDesc(WebModel theWebModel);
     
     public List<CommentModel> findByPoster(AccountModel theAccountModel);
 }

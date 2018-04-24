@@ -4,6 +4,7 @@
         <title>User Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
             .leftnav {
@@ -49,8 +50,19 @@
             }
 
             table{
+                border-collapse: collapse;
                 margin: auto;
-                width: 25%; 
+            }
+
+            .title{
+                text-align: right;
+                border-right: 1px solid #ddd;
+            }
+
+            td {
+                padding: 10px;
+                padding-right: 30px;
+                border-bottom: 1px solid #ddd;
             }
 
             .rightnav {
@@ -66,7 +78,6 @@
         <div class="leftnav">
             <ul>
                 <li><a href="/userpage/accountinfo">Account</a></li>
-                <li><a href="/userpage/favorites">Favorites</a></li>
                 <li><a href="/userpage/addweb">Add new web page</a></li>
                 <li><a href="/userpage/history">History</a></li>
                 <li><a href="/userpage/setting">Setting</a></li>
@@ -80,6 +91,8 @@
             <h2>Account Information</h2>
             <form action="/userpage/modifyinfo">
                 Username<input type="text" class="textField" name="username" th:value="${username}" /><br/>
+                Name<input type="text" class="textField" name="name" th:value="${user.getName()}" /><br/>
+                Email<input type="text" class="textField" name="email" th:value="${user.getEmail()}" /><br/>
                 <p style="color:red;" th:text="${alert}"/>
                 <input type="submit" class="modify" value="Modify" />
             </form>
@@ -87,12 +100,20 @@
             <div>
                 <table>
                     <tr>
-                        <td>Rated</td>
+                        <td class="title">Level</td>
+                        <td th:text="${user.level()}" />
+                    </tr>
+                    <tr>
+                        <td class="title">Rated</td>
                         <td th:text="${rateNum} + ' webs'" />
                     </tr>
                     <tr>
-                        <td>Posted</td>
+                        <td class="title">Posted</td>
                         <td th:text="${commentNum} + ' comments'" />
+                    </tr>
+                    <tr>
+                        <td class="title">Explored</td>
+                        <td th:text="${actionNum} + ' websites'" />
                     </tr>
                 </table>
             </div>

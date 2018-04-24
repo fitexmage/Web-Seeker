@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head> 
+        <title>Search Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
+        <script type="text/javascript" src="/link.js"></script>
+        <style>
+            .searchResult {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .searchList {
+                border-collapse:collapse;
+                margin: auto;
+            }
+
+            .searchList td, .searchList th 
+            {
+                border:1px solid #98bf21;
+                padding:10px 20px 10px 20px;
+            }
+
+            .searchList th 
+            {
+                font-size:1.1em;
+                padding-top:5px;
+                padding-bottom:4px;
+                background-color:#A7C942;
+                color:#ffffff;
+            }
+
+            .searchList tr.alt td 
+            {
+                color:#000000;
+                background-color:#EAF2D3;
+            }
+        </style>
+    </head>
+    <body>
+        <div th:replace="header :: header"></div>
+
+        <div class="searchResult">
+            <h2>Search Result</h2>
+            <br/>
+            <div th:if="${webList.size() != 0}">
+                <h2>Web Result</h2>
+                <br/>
+                <table class="searchList">
+                    <tr>
+                        <th>Web</th>
+                        <th>URL</th>
+                        <th>Category</th>
+                    </tr>
+                    <tr th:each="web: ${webList}">
+                        <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
+                        <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
+                        <td th:text="${web.categoryToString(web.getCategory())}"/>
+                    </tr>
+                </table>
+            </div>
+            <br/><br/>
+            <div th:if="${userList.size() != 0}">
+                <h2>User Result</h2>
+                <br/>
+                <table class="searchList">
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="user: ${userList}">
+                        <td th:text="${user.getName()}"></td>
+                        <td th:text="${user.getUser().getUsername()}"></td>
+                        <td><a th:href="@{'/userinfo?user=' + ${user.getUser().getId()}}">Detail</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br/><br/>
+        <div th:replace="footer :: footer"></div>
+    </body>
+</html>

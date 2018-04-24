@@ -1,9 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head> 
-        <title>Web Page</title>
+        <title>Web Info Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
             .info {
@@ -14,7 +15,7 @@
 
             table{
                 border-collapse: collapse;
-                width: 100%;
+                margin: auto;
             }
 
             .title{
@@ -56,7 +57,7 @@
 
             .like{
                 float: right;
-                margin-top: 10px;
+                margin-top: 0px;
                 margin-right: 10px;
             }
 
@@ -66,10 +67,14 @@
                 margin-left: 15px;
             }
 
+            .deleteComment{
+                float: right;
+                margin-right: 20px;
+            }
+
             .time{
                 float: right;
                 margin-right: 10px;
-                margin-bottom: 10px;
             }
         </style>
     </head>
@@ -118,22 +123,44 @@
                 </tr>
             </table>
             <br/>
-            <p style="color:red;" th:if="${!canComment}">Login to rate and see the comments!</p>
+            <p style="color:red;" th:if="${username == null}">Login to rate and see the comments!</p>
 
-            <div th:if="${canComment}">
+            <div th:if="${username != null}">
+                <br/>
+                <div>
+                    <div th:if="${canReport}">
+                        Information not correct?
+                        <a th:href="'/webinfo/report?web=' + ${web.getId()}">Report it!</a>
+                    </div>
+                    <div th:if="${!canReport}">
+                        Already reported this web!
+                    </div>
+                    <br/>
+                    <a th:href="'/webinfo/requestmodifyweb?web=' + ${web.getId()}">Modify this web</a>
+                    <p style="color:red;" th:text="${alert}"></p>
+                </div>
+                <br/>
+                <hr></hr>
+                <br/>
                 <div>
                     <p>Write your comment!</p>
                     <form action="/webinfo/comment">
                         <textarea name="comment" maxlength="250" />
+                        <input type="checkBox" name="incognito" value="1" >Incognito</input>
                         <input type="hidden" name="web" th:value="${web.getId()}" />
                         <input type="hidden" name="canRate" th:value="${canRate}" />
                         <input type="submit" />
                     </form>
                 </div> 
-                <br/>
+                <br/><br/><br/>
                 <div th:each="comment: ${commentList}">
                     <div class="commentBlock">
-                        <div class="poster" th:text="${comment.getPoster().getUsername()} + ':'" />
+                        <div class="poster" th:if="${comment.getIncognito() == 0}">
+                            <a th:href="@{'/userinfo?user=' + ${comment.getPoster().getId()}}" th:text="${comment.getPoster().getUsername()}"></a>:
+                        </div>
+                        <div class="poster" th:if="${comment.getIncognito() == 1}">
+                            Anonymous User:
+                        </div>    
                         <br/>
                         <hr></hr>
                         <div class="comment" th:text="${comment.getComment()}" />
@@ -145,8 +172,9 @@
                                 <input type="submit" class="like" th:value="'Like:   ' + ${comment.getLikeNum()}" />
                             </form>
                         </table>
-                        <br/><br/>
+                        <br/><br/><br/><br/>
                         <p class="time" th:text="${comment.getPostTime().toLocalDate()} + ' ' + ${comment.getPostTime().toLocalTime().withNano(0)}" />
+                        <p><a class="deleteComment" th:if="${comment.getPoster().getUsername().equals(username)}" th:href="@{'/webinfo/deletecomment?web=' + ${web.getId()} + '&amp;comment=' + ${comment.getId()} + '&amp;canRate=' + ${canRate}}">Delete</a></p>
                     </div>
                 </div>
             </div>

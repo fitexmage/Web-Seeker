@@ -41,6 +41,11 @@ public class AccountModel {
     public AccountModel(){
         
     }
+    
+    public static AccountModel newAccount(String username, String password){
+        AccountModel newAccountModel = new AccountModel(username, password, 1);
+        return newAccountModel;
+    }
 
     public boolean isValid() {
         boolean valid = false;

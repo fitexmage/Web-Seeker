@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head> 
+        <title>User Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
+        <script type="text/javascript" src="/link.js"></script>
+        <style>
+            .leftnav {
+                float: left;
+                width: 15%;
+                height: 1000px;
+                margin-left: 5%;
+                font-size: 13pt;
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                background-color: #f1f1f1;
+            }
+
+            li a {
+                display: block;
+                color: #000;
+                padding: 8px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #555;
+                color: white;
+            }
+
+            .setting {
+                text-align: center;
+            }
+            
+            table{
+                margin: auto;
+                width: 50%;
+            }
+
+            .rightnav {
+                float: right;
+                width: 20%;
+                height: 1000px;
+            }
+        </style>
+    </head>
+    <body>
+        <div th:replace="header :: header"></div>
+
+        <div class="leftnav">
+            <ul>
+                <li><a href="/userpage/accountinfo">Account</a></li>
+                <li><a href="/userpage/addweb">Add new web page</a></li>
+                <li><a href="/userpage/history">History</a></li>
+                <li><a href="/userpage/setting">Setting</a></li>
+            </ul>
+        </div>
+
+        <div class="rightnav"></div>
+
+        <br/>
+        <div class="setting">
+            <h2>Setting</h2>
+            <br/>
+            <form action="/userpage/modifysetting">
+                <table>
+                    <tr>
+                        <td>Allow Web Seeker to get your explore data</td>
+                        <td><input type="radio" name="recordAction" value="1" th:checked="${user.getRecordAction() == 1}" /> Yes</td>
+                        <td><input type="radio" name="recordAction" value="0" th:checked="${user.getRecordAction() == 0}"/> No</td>
+                    </tr>
+                    <tr>
+                        <td height="20px"></td>
+                    </tr>
+                    <tr>
+                        <td>Display your email to public</td>
+                        <td><input type="radio" name="shareEmail" value="1" th:checked="${user.getShareEmail() == 1}" /> Yes</td>
+                        <td><input type="radio" name="shareEmail" value="0" th:checked="${user.getShareEmail() == 0}" /> No</td>
+                    </tr>
+                    <tr>
+                        <td height="20px"></td>
+                    </tr>
+                    <tr>
+                        <td>Display your action data to public</td>
+                        <td><input type="radio" name="shareAction" value="1" th:checked="${user.getShareAction() == 1}" /> Yes</td>
+                        <td><input type="radio" name="shareAction" value="0" th:checked="${user.getShareAction() == 0}" /> No</td>
+                    </tr>
+                </table>
+                <br/>
+                <p style="color:red;" th:text="${alert}"/>
+                <input type="submit" class="modify" value="Modify" />
+            </form>
+        </div>
+        <br/><br/><br/><br/><br/>
+        <div th:replace="footer :: footer"></div>
+    </body>
+</html>

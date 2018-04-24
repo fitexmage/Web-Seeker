@@ -25,6 +25,9 @@ public class MainController {
     private AccountRepository theAccountRepository;
 
     @Autowired
+    private UserRepository theUserRepository;
+
+    @Autowired
     private WebRepository theWebRepository;
 
     @Autowired
@@ -36,6 +39,9 @@ public class MainController {
     @Autowired
     private ActionRepository theActionRepository;
 
+    @Autowired
+    private ReportRepository theReportRepository;
+
     public MainController() {
 
     }
@@ -46,11 +52,53 @@ public class MainController {
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("username", theUser.getUsername());
+
+            AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+            List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
+            HashMap<Integer, Integer> webVisitMap = new HashMap<Integer, Integer>();
+            for (ActionModel theActionModel : actionList) {
+                int category = theActionModel.getWeb().getCategory();
+                if (webVisitMap.containsKey(category)) {
+                    webVisitMap.put(category, webVisitMap.get(category) + 1);
+                } else {
+                    webVisitMap.put(category, 1);
+                }
+            }
+            List<Map.Entry<Integer, Integer>> webVisitList = new ArrayList<Map.Entry<Integer, Integer>>(webVisitMap.entrySet());
+            Collections.sort(webVisitList, new Comparator<Map.Entry<Integer, Integer>>() {
+                public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+                    return o2.getValue().compareTo(o1.getValue());
+                }
+            });
+            if (webVisitList.size() >= 2) {
+                int category1st = webVisitList.get(0).getKey();
+                int category2nd = webVisitList.get(1).getKey();
+                List<WebModel> recommendList = theWebRepository.findTop10ByCategoryOrCategory(category1st, category2nd);
+                model.addAttribute("recommendList", recommendList);
+            }
         }
 
         List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
         return "homepage";
+    }
+
+    @RequestMapping("/search")
+    public String search(@RequestParam(value = "input", defaultValue = "") String input,
+            Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
+        }
+
+        List<WebModel> webSearchList = theWebRepository.findByWebNameContainingIgnoreCaseOrUrlContainingIgnoreCaseOrDescriptionContainingIgnoreCase(input, input, input);
+        List<UserModel> userSearchList = theUserRepository.findByNameContainingIgnoreCase(input);
+        model.addAttribute("input", input);
+        model.addAttribute("webList", webSearchList);
+        model.addAttribute("userList", userSearchList);
+
+        return "search";
     }
 
     @RequestMapping("/popular")
@@ -62,35 +110,30 @@ public class MainController {
             model.addAttribute("username", theUser.getUsername());
         }
 
-        List<ActionModel> actionList = (List) theActionRepository.findAll();
-        HashMap<Long, Integer> webVisitMap = new HashMap<Long, Integer>();
-        for (ActionModel theActionModel : actionList) {
-            Long webId = theActionModel.getWeb().getId();
-            if (webVisitMap.containsKey(webId)) {
-                webVisitMap.put(webId, webVisitMap.get(webId) + 1);
-            } else {
-                webVisitMap.put(theActionModel.getWeb().getId(), 1);
-            }
-        }
+        List<WebModel> webList = theWebRepository.findTop20ByOrderByActionDesc();
 
-        ArrayList<WebModel> decsendingWebVisitList = new ArrayList<WebModel>();
-        int webNum = 0;
-        List<Map.Entry<Long, Integer>> webVisitList = new ArrayList<Map.Entry<Long, Integer>>(webVisitMap.entrySet());
-        Collections.sort(webVisitList, new Comparator<Map.Entry<Long, Integer>>() {
-            public int compare(Map.Entry<Long, Integer> o1, Map.Entry<Long, Integer> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        for (Map.Entry<Long, Integer> mapping : webVisitList) {
-            if (webNum < 20) {
-                decsendingWebVisitList.add(theWebRepository.findById(mapping.getKey()));
-            }
-            webNum++;
-        }
-
-        model.addAttribute("webList", decsendingWebVisitList);
+        model.addAttribute("webList", webList);
 
         return "popular";
+    }
+
+    @RequestMapping("/webest")
+    public String webest(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
+        }
+
+        List<WebModel> highestRateList = theWebRepository.findTop10ByOrderByRateDesc();
+        List<WebModel> mostRaterList = theWebRepository.findTop10ByOrderByRaterDesc();
+        List<WebModel> mostCommentList = theWebRepository.findTop10ByOrderByCommentDesc();
+
+        model.addAttribute("highestRateList", highestRateList);
+        model.addAttribute("mostRaterList", mostRaterList);
+        model.addAttribute("mostCommentList", mostCommentList);
+
+        return "webest";
     }
 
     @RequestMapping("/category")
@@ -103,147 +146,32 @@ public class MainController {
             model.addAttribute("username", theUser.getUsername());
         }
 
-        List<WebModel> webList = theWebRepository.findByCategory(category);
-        if (!webList.isEmpty()) {
-            Collections.sort(webList, new Comparator<WebModel>() {
-                @Override
-                public int compare(WebModel o1, WebModel o2) {
-                    double i = o1.rate() - o2.rate();
-                    if (i > 0) {
-                        return -1;
-                    } else if (i == 0) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-                }
-            });
+        List<WebModel> webList = theWebRepository.findTop20ByCategoryOrderByRateDesc(category);
 
-            ArrayList<WebModel> highList = new ArrayList<WebModel>();
-            int webNum;
-            if (webList.size() > 20) {
-                webNum = 20;
-            } else {
-                webNum = webList.size();
-            }
-
-            for (int i = 0; i < webNum; i++) {
-                highList.add(webList.get(i));
-            }
-            if (!highList.isEmpty()) {
-                model.addAttribute("webList", highList);
-            }
-        }
+        model.addAttribute("webList", webList);
         model.addAttribute("category", WebModel.categoryToString(category) + " Website Rank");
         return "category";
     }
 
-    @RequestMapping("/webinfo")
-    public String webInfo(@RequestParam(value = "webId", defaultValue = "") Long webId,
+    @RequestMapping("/userinfo")
+    public String userInfo(@RequestParam(value = "user", defaultValue = "") Long userId,
             Model model) {
-        WebModel theWebModel = theWebRepository.findById(webId);
-
-        RateModel theRateModel = null;
-        boolean canRate = false;
-        boolean canComment = false;
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("username", theUser.getUsername());
-            
-            AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
-            theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-            canRate = true;
-            canComment = true;
-
-            ActionModel newAction = ActionModel.newAction(theWebModel, theAccountModel);
-            theActionRepository.save(newAction);
         }
+        AccountModel theAccountModel = theAccountRepository.findById(userId);
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
 
-        if (theRateModel != null) {
-            canRate = false;
-        }
+        List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
+        List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
+        List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
 
-        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
-
-        model.addAttribute("web", theWebModel);
-        model.addAttribute("canRate", canRate);
-        model.addAttribute("canComment", canComment);
-        model.addAttribute("commentList", commentList);
-        return "webinfo";
-    }
-
-    @RequestMapping("/webinfo/rate")
-    public String rate(@RequestParam(value = "score", defaultValue = "") String score,
-            @RequestParam(value = "web", defaultValue = "") Long webId,
-            Model model) {
-        WebModel theWebModel = theWebRepository.findById(webId);
-        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
-
-        RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        if (theRateModel == null) {
-            RateModel newRate = RateModel.newRate(theWebModel, theAccountModel, Integer.parseInt(score));
-            theRateRepository.save(newRate);
-
-            theWebModel.setRater(theWebModel.getRater() + 1);
-            theWebModel.setTotalScore(theWebModel.getTotalScore() + Integer.parseInt(score));
-            theWebRepository.save(theWebModel);
-        }
-
-        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
-
-        model.addAttribute("username", theAccountModel.getUsername());
-        model.addAttribute("web", theWebModel);
-        model.addAttribute("canRate", false);
-        model.addAttribute("canComment", true);
-        model.addAttribute("commentList", commentList);
-        return "webinfo";
-    }
-
-    @RequestMapping("/webinfo/comment")
-    public String comment(@RequestParam(value = "comment", defaultValue = "") String comment,
-            @RequestParam(value = "web", defaultValue = "") Long webId,
-            @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
-            Model model) {
-        WebModel theWebModel = theWebRepository.findById(webId);
-        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
-
-        CommentModel newComment = CommentModel.newComment(theWebModel, theAccountModel, comment);
-        theCommentRepository.save(newComment);
-
-        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
-
-        model.addAttribute("username", theAccountModel.getUsername());
-        model.addAttribute("web", theWebModel);
-        model.addAttribute("canRate", canRate);
-        model.addAttribute("canComment", true);
-        model.addAttribute("commentList", commentList);
-        return "webinfo";
-    }
-
-    @RequestMapping("/webinfo/like")
-    public String like(@RequestParam(value = "comment", defaultValue = "") Long commentId,
-            @RequestParam(value = "web", defaultValue = "") Long webId,
-            @RequestParam(value = "canRate", defaultValue = "") boolean canRate,
-            Model model) {
-        WebModel theWebModel = theWebRepository.findById(webId);
-        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
-
-        CommentModel theCommentModel = theCommentRepository.findById(commentId);
-        theCommentModel.setLikeNum(theCommentModel.getLikeNum() + 1);
-        theCommentRepository.save(theCommentModel);
-
-        List<CommentModel> commentList = theCommentRepository.findByWeb(theWebModel);
-
-        model.addAttribute("username", theAccountModel.getUsername());
-        model.addAttribute("web", theWebModel);
-        model.addAttribute("canRate", canRate);
-        model.addAttribute("canComment", true);
-        model.addAttribute("commentList", commentList);
-        return "webinfo";
+        model.addAttribute("user", theUserModel);
+        model.addAttribute("rateNum", rateList.size());
+        model.addAttribute("commentNum", commentList.size());
+        model.addAttribute("actionNum", actionList.size());
+        return "userinfo";
     }
 }

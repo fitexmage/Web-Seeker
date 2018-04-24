@@ -15,6 +15,8 @@ import webseeker.model.AccountModel;
  */
 public interface AccountRepository extends CrudRepository<AccountModel, Long>{
     
+    public AccountModel findById(Long id);
+    
     public AccountModel findByUsername(String username);
     
 }

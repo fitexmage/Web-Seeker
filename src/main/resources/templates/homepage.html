@@ -5,6 +5,7 @@
         <title>Home Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
             .block {
@@ -79,24 +80,23 @@
         <div th:replace="header :: header"></div>
 
         <div class="main">
-            <div class="block">
+            <div class="block" th:if="${recommendList != null}">
                 <h2>Web you may like</h2>
                 <table class="recommendation" align="center">
                     <tr>
                         <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
-                        <th>Detail</th>
                     </tr>
-                    <tr th:each="web: ${webList}">
-                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
+                    <tr th:each="web: ${recommendList}">
+                        <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
                     </tr>
                 </table>
+                <br/><br/>
+                <hr></hr>
             </div>
-            <br/>
-            <hr></hr>
             <div class="block">
                 <h2>Find new added web</h2>
                 <table class="new" align="center" border="1">
@@ -106,7 +106,7 @@
                         <th>Category</th>
                     </tr>
                     <tr th:each="web: ${newList}">
-                        <td><a th:href="@{'/webinfo?webId=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
+                        <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
                     </tr>

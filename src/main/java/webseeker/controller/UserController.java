@@ -19,6 +19,9 @@ public class UserController {
     private AccountRepository theAccountRepository;
 
     @Autowired
+    private UserRepository theUserRepository;
+
+    @Autowired
     private WebRepository theWebRepository;
 
     @Autowired
@@ -30,55 +33,61 @@ public class UserController {
     @Autowired
     private ActionRepository theActionRepository;
 
+    @Autowired
+    private ReportRepository theReportRepository;
+
     public UserController() {
 
     }
 
-    @RequestMapping("/userpage")
+    @RequestMapping(value = {"/userpage", "/userpage/accountinfo"})
     public String userPage(Model model) {
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
         List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
         List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
-        model.addAttribute("username", theAccountModel.getUsername());
-        model.addAttribute("rateNum", rateList.size());
-        model.addAttribute("commentNum", commentList.size());
-        return "accountinfo";
-    }
+        List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
 
-    @RequestMapping("/userpage/accountinfo")
-    public String accountInfo(Model model) {
-        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
-        List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
-        List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
         model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("user", theUserModel);
+
         model.addAttribute("rateNum", rateList.size());
         model.addAttribute("commentNum", commentList.size());
+        model.addAttribute("actionNum", actionList.size());
         return "accountinfo";
     }
 
     @RequestMapping("/userpage/modifyinfo")
     public String modifyInfo(@RequestParam(value = "username", defaultValue = "") String username,
+            @RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(value = "email", defaultValue = "") String email,
             Model model) {
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
 
         if (!username.equals("")) {
             theAccountModel.setUsername(username);
             theAccountRepository.save(theAccountModel);
+            theUserModel.setName(name);
+            theUserModel.setEmail(email);
+            theUserRepository.save(theUserModel);
             model.addAttribute("alert", "Modify successfully!");
         } else {
             model.addAttribute("alert", "Something was wrong!");
         }
 
-        model.addAttribute("username", theAccountModel.getUsername());
-        return "accountinfo";
-    }
+        List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
+        List<CommentModel> commentList = theCommentRepository.findByPoster(theAccountModel);
+        List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
 
-    @RequestMapping("/userpage/favorites")
-    public String favorites(Model model) {
-        return "homepage";
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("user", theUserModel);
+        model.addAttribute("rateNum", rateList.size());
+        model.addAttribute("commentNum", commentList.size());
+        model.addAttribute("actionNum", actionList.size());
+        return "accountinfo";
     }
 
     @RequestMapping("/userpage/addweb")
@@ -98,7 +107,7 @@ public class UserController {
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         model.addAttribute("username", theAccountModel.getUsername());
-        
+
         WebModel theWebModel = theWebRepository.findByUrl(url);
         if (theWebModel == null) {
             WebModel newWebModel = WebModel.newWeb(theAccountModel, webName, url, category, description);
@@ -131,10 +140,15 @@ public class UserController {
     public String delectAction(@RequestParam(value = "action", defaultValue = "") Long action,
             Model model) {
 
-        theActionRepository.delete(action);
-
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
+
+        theActionRepository.delete(action);
+
+        theUserModel.setExp(theUserModel.getExp() - 1);
+        theUserRepository.save(theUserModel);
+
         List<ActionModel> actionList = theActionRepository.findByVisiter(theAccountModel);
         Collections.reverse(actionList);
 
@@ -146,6 +160,32 @@ public class UserController {
 
     @RequestMapping("/userpage/setting")
     public String setting(Model model) {
-        return "homepage";
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("user", theUserModel);
+        return "setting";
+    }
+
+    @RequestMapping("/userpage/modifysetting")
+    public String modifySetting(@RequestParam(value = "recordAction", defaultValue = "") String recordAction,
+            @RequestParam(value = "shareEmail", defaultValue = "") String shareEmail,
+            @RequestParam(value = "shareAction", defaultValue = "") String shareAction,
+            Model model) {
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
+
+        theUserModel.setRecordAction(Integer.parseInt(recordAction));
+        theUserModel.setShareEmail(Integer.parseInt(shareEmail));
+        theUserModel.setShareAction(Integer.parseInt(shareAction));
+        theUserRepository.save(theUserModel);
+
+        model.addAttribute("username", theAccountModel.getUsername());
+        model.addAttribute("user", theUserModel);
+        model.addAttribute("alert", "Modify successfully!");
+        return "setting";
     }
 }

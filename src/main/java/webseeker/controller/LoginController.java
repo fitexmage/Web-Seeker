@@ -3,7 +3,6 @@ package webseeker.controller;
 import webseeker.repository.*;
 import webseeker.model.*;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +20,9 @@ public class LoginController {
 
     @Autowired
     private UserService theUserService;
+    
+    @Autowired
+    private UserRepository theUserRepository;
 
     @Autowired
     private WebRepository theWebRepository;
@@ -33,6 +35,9 @@ public class LoginController {
 
     @Autowired
     private ActionRepository theActionRepository;
+    
+    @Autowired
+    private ReportRepository theReportRepository;
 
     public LoginController() {
 
@@ -46,16 +51,6 @@ public class LoginController {
             List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
             model.addAttribute("newList", newList);
             return "homepage";
-        } else {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (!(auth instanceof AnonymousAuthenticationToken)) {
-                User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                model.addAttribute("username", theUser.getUsername());
-                model.addAttribute("welcome", "Welcome " + theUser.getUsername() + "!");
-                List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
-                model.addAttribute("newList", newList);
-                return "homepage";
-            }
         }
         return "login";
     }
@@ -77,10 +72,12 @@ public class LoginController {
     public String register(@RequestParam(value = "username", defaultValue = "") String username,
             @RequestParam(value = "password", defaultValue = "") String password,
             Model model) {
-        AccountModel theAccountModel = new AccountModel(username, password, 1);
-        if (theAccountModel.isValid()) {
+        AccountModel newAccountModel = AccountModel.newAccount(username, password);
+        if (newAccountModel.isValid()) {
             if (theUserService.findByUsername(username) == null) {
-                theUserService.save(theAccountModel);
+                theUserService.save(newAccountModel);
+                UserModel newUserModel = UserModel.newUser(newAccountModel);
+                theUserRepository.save(newUserModel);
                 model.addAttribute("alert", "Register Successfully!");
                 return "login";
             } else {

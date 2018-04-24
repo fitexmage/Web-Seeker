@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head> 
+        <title>User Info Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/header.css" type="text/css" />
+        <link rel="stylesheet" href="/footer.css" type="text/css" />
+        <script type="text/javascript" src="/link.js"></script>
+        <style>
+            .userInfo {
+                padding: 15px;
+                text-align: center;
+            }
+
+            table{
+                border-collapse: collapse;
+                margin: auto;
+            }
+
+            .title{
+                text-align: right;
+                border-right: 1px solid #ddd;
+            }
+
+            td {
+                padding: 10px;
+                padding-right: 30px;
+                border-bottom: 1px solid #ddd;
+            }
+        </style>
+    </head>
+    <body>
+        <div th:replace="header :: header"></div>
+
+        <div class="userInfo">
+            <h2>User Information</h2>
+            <table class="infoList">
+                <tr>
+                    <td class="title">Name</td>
+                    <td th:text="${user.getName()}" />
+                </tr>
+                <tr>
+                    <td class="title">Level</td>
+                    <td th:text="${user.level()}" />
+                </tr>
+                <div th:if="${user.getShareEmail() == 1}">
+                    <tr>
+                        <td class="title">Email</td>
+                        <td th:text="${user.getEmail()}" />
+                    </tr>
+                </div>
+                <div th:if="${user.getShareAction() == 1}">
+                    <tr>
+                        <td class="title">Rated</td>
+                        <td th:text="${rateNum} + ' webs'" />
+                    </tr>
+                    <tr>
+                        <td class="title">Posted</td>
+                        <td th:text="${commentNum} + ' comments'" />
+                    </tr>
+                    <tr>
+                        <td class="title">Explored</td>
+                        <td th:text="${actionNum} + ' websites'" />
+                    </tr>
+                </div>
+            </table>
+        </div>
+        <br/><br/>
+        <div th:replace="footer :: footer"></div>
+    </body>
+</html>

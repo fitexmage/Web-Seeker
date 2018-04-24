@@ -32,21 +32,23 @@ public class CommentModel {
     private String comment;
     private ZonedDateTime postTime;
     private int likeNum;
+    private int incognito;
 
-    public CommentModel(WebModel web, AccountModel poster, String comment, ZonedDateTime postTime, int likeNum) {
+    public CommentModel(WebModel web, AccountModel poster, String comment, ZonedDateTime postTime, int likeNum, int incognito) {
         this.web = web;
         this.poster = poster;
         this.comment = comment;
         this.postTime = postTime;
         this.likeNum = likeNum;
+        this.incognito = incognito;
     }
     
     public CommentModel(){
         
     }
     
-    public static CommentModel newComment(WebModel web, AccountModel poster, String comment){
-        CommentModel newComment = new CommentModel(web, poster, comment, ZonedDateTime.now(), 0);
+    public static CommentModel newComment(WebModel web, AccountModel poster, String comment, int incognito){
+        CommentModel newComment = new CommentModel(web, poster, comment, ZonedDateTime.now(), 0, incognito);
         return newComment;
     }
 
@@ -132,5 +134,19 @@ public class CommentModel {
      */
     public void setLikeNum(int likeNum) {
         this.likeNum = likeNum;
+    }
+
+    /**
+     * @return the incognito
+     */
+    public int getIncognito() {
+        return incognito;
+    }
+
+    /**
+     * @param incognito the incognito to set
+     */
+    public void setIncognito(int incognito) {
+        this.incognito = incognito;
     }
 }

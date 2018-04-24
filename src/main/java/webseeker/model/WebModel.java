@@ -33,15 +33,23 @@ public class WebModel {
     private String description;
     private int totalScore;
     private int rater; // Num of raters
+    private double rate;
+    private int comment;
+    private int action;
+    private int report;
     private ZonedDateTime addTime;
 
-    public WebModel(AccountModel creator, String webName, String url, int category, String description, int totalScore, int rater, ZonedDateTime addTime) {
+    public WebModel(AccountModel creator, String webName, String url, int category, String description, int totalScore, int rater, double rate, int comment, int action, int report, ZonedDateTime addTime) {
         this.creator = creator;
         this.webName = webName;
         this.url = url;
         this.category = category;
         this.totalScore = totalScore;
         this.rater = rater;
+        this.rate = rate;
+        this.comment = comment;
+        this.action = action;
+        this.report = report;
         this.addTime = addTime;
     }
 
@@ -58,7 +66,7 @@ public class WebModel {
     }
 
     public static WebModel newWeb(AccountModel theAccountModel, String webName, String url, String category, String description) {
-        WebModel newWebModel = new WebModel(theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, ZonedDateTime.now());
+        WebModel newWebModel = new WebModel(theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, 0, 0, 0, 0, ZonedDateTime.now());
         return newWebModel;
     }
 
@@ -231,6 +239,62 @@ public class WebModel {
      */
     public void setRater(int rater) {
         this.rater = rater;
+    }
+
+    /**
+     * @return the rate
+     */
+    public double getRate() {
+        return rate;
+    }
+
+    /**
+     * @param rate the rate to set
+     */
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    /**
+     * @return the comment
+     */
+    public int getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(int comment) {
+        this.comment = comment;
+    }
+
+    /**
+     * @return the action
+     */
+    public int getAction() {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    /**
+     * @return the report
+     */
+    public int getReport() {
+        return report;
+    }
+
+    /**
+     * @param report the report to set
+     */
+    public void setReport(int report) {
+        this.report = report;
     }
 
     /**
