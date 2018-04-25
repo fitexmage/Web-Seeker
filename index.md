@@ -20,7 +20,7 @@ Allow users to register and login, allow users to see and modify their account i
 Allow users to rate and write comments for each web page, allow users to "like" other's comments, store users' exploring history and display them to themselves, display the latest created web page on the home page, display the list of popular web pages based on the times user visit them, allow users to explore web pages by categories and then display the webs by order of rate.
 
 ### Project Milestone 3
-Allow users to use search bar to search for name or tags of web pages, allow users to go to a page called "webest", which contains lots of rank based on different benchmark, allow users to report or request to modify the web pages, allow users to see the others' information, give users recommendation based on history on the homepage, allow users to post icognito comments.
+Allow users to use search bar to search for web pages or users of, allow users to go to a page called "webest", which contains lots of rank based on different benchmark, allow users to report or request to modify the web pages, allow users to see the others' information, give users recommendation based on history on the homepage, allow users to post icognito comments.
 
 ### Finaly Project
 The final project will contain all the functionalities in the use cases. It will have the setting page about preference, such as whether or not to allow record history. The website will have a footer for introduction of the arthor and reporting bugs. Moreover, when users post a comment or rate a web, they will get experience. The experience will make them level up and have some authority such as modifying the web information.
