@@ -10,9 +10,15 @@
             .leftnav {
                 float: left;
                 width: 15%;
-                height: 1000px;
+                height: 300px;
                 margin-left: 5%;
                 font-size: 13pt;
+            }
+            
+            .rightnav {
+                float: right;
+                width: 20%;
+                height: 300px;
             }
 
             ul {
@@ -64,12 +70,6 @@
                 color:#000000;
                 background-color:#EAF2D3;
             }
-
-            .rightnav {
-                float: right;
-                width: 20%;
-                height: 1000px;
-            }
         </style>
     </head>
     <body>
@@ -106,9 +106,7 @@
                     </td>
                 </tr>
             </table>
-
         </div>
-        <br/><br/><br/><br/><br/>
         <div th:replace="footer :: footer"></div>
     </body>
 </html>

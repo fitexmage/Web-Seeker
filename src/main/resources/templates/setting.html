@@ -10,9 +10,15 @@
             .leftnav {
                 float: left;
                 width: 15%;
-                height: 1000px;
+                height: 300px;
                 margin-left: 5%;
                 font-size: 13pt;
+            }
+
+            .rightnav {
+                float: right;
+                width: 20%;
+                height: 300px;
             }
 
             ul {
@@ -41,12 +47,6 @@
             table{
                 margin: auto;
                 width: 50%;
-            }
-
-            .rightnav {
-                float: right;
-                width: 20%;
-                height: 1000px;
             }
         </style>
     </head>
@@ -96,7 +96,6 @@
                 <input type="submit" class="modify" value="Modify" />
             </form>
         </div>
-        <br/><br/><br/><br/><br/>
         <div th:replace="footer :: footer"></div>
     </body>
 </html>

@@ -153,6 +153,28 @@ public class MainController {
         return "category";
     }
 
+    @RequestMapping("/explore")
+    public String explore(Model model) {
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("username", theUser.getUsername());
+        }
+        
+        List<WebModel> allWebList = (List)theWebRepository.findAll();
+        int[] randomArray = WebModel.randomCommon(0, allWebList.size(), 20);
+        ArrayList<WebModel> webList = new ArrayList<WebModel>();
+        
+        for(int i = 0; i< randomArray.length;i++){
+            webList.add(allWebList.get(randomArray[i]));
+        }
+        
+        model.addAttribute("webList", webList);
+
+        return "explore";
+    }
+
     @RequestMapping("/userinfo")
     public String userInfo(@RequestParam(value = "user", defaultValue = "") Long userId,
             Model model) {

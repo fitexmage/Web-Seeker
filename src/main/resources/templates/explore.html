@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head> 
-        <title>Popular Page</title>
+        <title>Explore Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <link rel="stylesheet" href="/footer.css" type="text/css" />
         <script type="text/javascript" src="/link.js"></script>
         <style>
-            .popular {
+            .explore {
                 padding: 15px;
                 text-align: center;
             }
@@ -44,17 +44,15 @@
     <body>
         <div th:replace="header :: header"></div>
 
-        <div class="popular">
-            <h2>The Most Popular Page</h2>
+        <div class="explore">
+            <h2>Explore Random Page!</h2>
             <table class="webList">
                 <tr>
-                    <th>Rank</th>
                     <th>Web</th>
                     <th>URL</th>
                     <th>Category</th>
                 </tr>
-                <tr th:each="web, webStat: ${webList}">
-                    <td th:text="${webStat.index + 1}"/>
+                <tr th:each="web: ${webList}">
                     <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                     <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                     <td th:text="${web.categoryToString(web.getCategory())}"/>
