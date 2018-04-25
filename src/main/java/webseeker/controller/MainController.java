@@ -149,7 +149,7 @@ public class MainController {
         List<WebModel> webList = theWebRepository.findTop20ByCategoryOrderByRateDesc(category);
 
         model.addAttribute("webList", webList);
-        model.addAttribute("category", WebModel.categoryToString(category) + " Website Rank");
+        model.addAttribute("category", WebModel.categoryToString(category));
         return "category";
     }
 
