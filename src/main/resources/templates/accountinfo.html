@@ -89,11 +89,11 @@
         <br/>
         <div class="accountInfo">
             <h2>Account Information</h2>
+            <p style="color:red;" th:text="${alert}"/>
             <form action="/userpage/modifyinfo">
                 Username<input type="text" class="textField" name="username" th:value="${username}" /><br/>
                 Name<input type="text" class="textField" name="name" th:value="${user.getName()}" /><br/>
-                Email<input type="text" class="textField" name="email" th:value="${user.getEmail()}" /><br/>
-                <p style="color:red;" th:text="${alert}"/>
+                Email<input type="text" class="textField" name="email" th:value="${user.getEmail()}" /><br/><br/>
                 <input type="submit" class="modify" value="Modify" />
             </form>
             <br/><br/>

@@ -5,6 +5,7 @@
  */
 package webseeker.repository;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import webseeker.model.AccountModel;
 import webseeker.model.ReportModel;
@@ -16,5 +17,7 @@ import webseeker.model.WebModel;
  */
 public interface ReportRepository extends CrudRepository<ReportModel, Long>{
     
-    public ReportModel findByWebAndReporter(WebModel theWebModel, AccountModel theAccountModel);
+    public ReportModel findByWebAndReporterAndValid(WebModel theWebModel, AccountModel theAccountModel, int valid);
+    
+    public List<ReportModel> findByWebAndValid(WebModel theWebModel, int valid);
 }

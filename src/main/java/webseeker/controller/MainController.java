@@ -78,7 +78,7 @@ public class MainController {
             }
         }
 
-        List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
+        List<WebModel> newList = theWebRepository.findTop10ByOrderByAddTimeDesc();
         model.addAttribute("newList", newList);
         return "homepage";
     }

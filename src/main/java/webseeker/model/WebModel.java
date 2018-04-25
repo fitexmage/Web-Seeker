@@ -26,6 +26,9 @@ public class WebModel {
 
     @ManyToOne
     private AccountModel creator;
+    
+    @ManyToOne
+    private AccountModel editor;
 
     private String webName;
     private String url;
@@ -39,11 +42,13 @@ public class WebModel {
     private int report;
     private ZonedDateTime addTime;
 
-    public WebModel(AccountModel creator, String webName, String url, int category, String description, int totalScore, int rater, double rate, int comment, int action, int report, ZonedDateTime addTime) {
+    public WebModel(AccountModel creator, AccountModel editor, String webName, String url, int category, String description, int totalScore, int rater, double rate, int comment, int action, int report, ZonedDateTime addTime) {
         this.creator = creator;
+        this.editor = editor;
         this.webName = webName;
         this.url = url;
         this.category = category;
+        this.description = description;
         this.totalScore = totalScore;
         this.rater = rater;
         this.rate = rate;
@@ -66,7 +71,7 @@ public class WebModel {
     }
 
     public static WebModel newWeb(AccountModel theAccountModel, String webName, String url, String category, String description) {
-        WebModel newWebModel = new WebModel(theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, 0, 0, 0, 0, ZonedDateTime.now());
+        WebModel newWebModel = new WebModel(theAccountModel, theAccountModel, webName, url, WebModel.categoryToInt(category), description, 0, 0, 0, 0, 0, 0, ZonedDateTime.now());
         return newWebModel;
     }
 
@@ -155,6 +160,20 @@ public class WebModel {
      */
     public void setCreator(AccountModel creator) {
         this.creator = creator;
+    }
+
+    /**
+     * @return the editor
+     */
+    public AccountModel getEditor() {
+        return editor;
+    }
+
+    /**
+     * @param editor the editor to set
+     */
+    public void setEditor(AccountModel editor) {
+        this.editor = editor;
     }
 
     /**

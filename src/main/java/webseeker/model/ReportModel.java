@@ -30,11 +30,13 @@ public class ReportModel {
     private AccountModel reporter;
     
     private ZonedDateTime rateTime;
+    private int valid;
     
-    public ReportModel(WebModel web, AccountModel reporter, ZonedDateTime rateTime){
+    public ReportModel(WebModel web, AccountModel reporter, ZonedDateTime rateTime, int valid){
         this.web = web;
         this.reporter = reporter;
         this.rateTime = rateTime;
+        this.valid = valid;
     }
     
     public ReportModel(){
@@ -42,7 +44,77 @@ public class ReportModel {
     }
     
     public static ReportModel newReport(WebModel web, AccountModel reporter){
-        ReportModel newReport = new ReportModel(web, reporter, ZonedDateTime.now());
+        ReportModel newReport = new ReportModel(web, reporter, ZonedDateTime.now(), 1);
         return newReport;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the web
+     */
+    public WebModel getWeb() {
+        return web;
+    }
+
+    /**
+     * @param web the web to set
+     */
+    public void setWeb(WebModel web) {
+        this.web = web;
+    }
+
+    /**
+     * @return the reporter
+     */
+    public AccountModel getReporter() {
+        return reporter;
+    }
+
+    /**
+     * @param reporter the reporter to set
+     */
+    public void setReporter(AccountModel reporter) {
+        this.reporter = reporter;
+    }
+
+    /**
+     * @return the rateTime
+     */
+    public ZonedDateTime getRateTime() {
+        return rateTime;
+    }
+
+    /**
+     * @param rateTime the rateTime to set
+     */
+    public void setRateTime(ZonedDateTime rateTime) {
+        this.rateTime = rateTime;
+    }
+
+    /**
+     * @return the valid
+     */
+    public int getValid() {
+        return valid;
+    }
+
+    /**
+     * @param valid the valid to set
+     */
+    public void setValid(int valid) {
+        this.valid = valid;
     }
 }

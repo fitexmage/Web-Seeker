@@ -37,7 +37,7 @@
             .setting {
                 text-align: center;
             }
-            
+
             table{
                 margin: auto;
                 width: 50%;
@@ -67,7 +67,7 @@
         <br/>
         <div class="setting">
             <h2>Setting</h2>
-            <br/>
+            <p style="color:red;" th:text="${alert}"/>
             <form action="/userpage/modifysetting">
                 <table>
                     <tr>
@@ -93,7 +93,6 @@
                     </tr>
                 </table>
                 <br/>
-                <p style="color:red;" th:text="${alert}"/>
                 <input type="submit" class="modify" value="Modify" />
             </form>
         </div>

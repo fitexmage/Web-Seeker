@@ -57,12 +57,14 @@
                         <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
+                        <th>Rate</th>
                     </tr>
                     <tr th:each="web, webStat: ${highestRateList}">
                         <td th:text="${webStat.index + 1}"/>
                         <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
+                        <td th:text="${web.getRate()}"/>
                     </tr>
                 </table>
             </div>
@@ -76,12 +78,14 @@
                         <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
+                        <th>Raters</th>
                     </tr>
                     <tr th:each="web, webStat: ${mostRaterList}">
                         <td th:text="${webStat.index + 1}"/>
                         <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
+                        <td th:text="${web.getRater()}"/>
                     </tr>
                 </table>
             </div>
@@ -95,12 +99,14 @@
                         <th>Web</th>
                         <th>URL</th>
                         <th>Category</th>
+                        <th>Comments</th>
                     </tr>
                     <tr th:each="web, webStat: ${mostCommentList}">
                         <td th:text="${webStat.index + 1}"/>
                         <td><a th:href="@{'/webinfo?web=' + ${web.getId()}}" th:text="${web.getWebName()}"/></td>
                         <td><a th:href="@{${web.getUrl()}}" th:text="${web.getUrl()}" target="_blank"></a></td>
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
+                        <td th:text="${web.getComment()}"/>
                     </tr>
                 </table>
             </div>

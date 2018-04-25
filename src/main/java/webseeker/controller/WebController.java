@@ -66,15 +66,13 @@ public class WebController {
             AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
             UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
             RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-            ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+            ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
             canRate = true;
             canReport = true;
-
             if (theRateModel != null) {
                 canRate = false;
             }
-
             if (theReportModel != null) {
                 canReport = false;
             }
@@ -111,7 +109,7 @@ public class WebController {
         WebModel theWebModel = theWebRepository.findById(webId);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         if (theRateModel == null) {
             RateModel newRate = RateModel.newRate(theWebModel, theAccountModel, Integer.parseInt(score));
@@ -126,11 +124,8 @@ public class WebController {
             theUserRepository.save(theUserModel);
         }
 
-        boolean canRate = true;
+        boolean canRate = false;
         boolean canReport = true;
-
-        canRate = false;
-
         if (theReportModel != null) {
             canReport = false;
         }
@@ -154,7 +149,7 @@ public class WebController {
         WebModel theWebModel = theWebRepository.findById(webId);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         if (theReportModel == null) {
             ReportModel newReport = ReportModel.newReport(theWebModel, theAccountModel);
@@ -165,13 +160,10 @@ public class WebController {
         }
 
         boolean canRate = true;
-        boolean canReport = true;
-
+        boolean canReport = false;
         if (theRateModel != null) {
             canRate = false;
         }
-
-        canReport = false;
 
         List<CommentModel> commentList = theCommentRepository.findByWebOrderByPostTimeDesc(theWebModel);
 
@@ -193,15 +185,13 @@ public class WebController {
         WebModel theWebModel = theWebRepository.findById(webId);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         boolean canRate = true;
         boolean canReport = true;
-
         if (theRateModel != null) {
             canRate = false;
         }
-
         if (theReportModel != null) {
             canReport = false;
         }
@@ -210,7 +200,7 @@ public class WebController {
 
         if (theWebModel.getReport() >= 1) {
             int reportNum = 0;
-            List<WebModel> addWebList = theWebRepository.findByCreator(theAccountModel);
+            List<WebModel> addWebList = theWebRepository.findByEditor(theAccountModel);
             for (WebModel theWeb : addWebList) {
                 reportNum += theWeb.getReport();
             }
@@ -229,7 +219,6 @@ public class WebController {
                 return "webinfo";
             }
         } else {
-
             model.addAttribute("username", theAccountModel.getUsername());
             model.addAttribute("web", theWebModel);
             model.addAttribute("canRate", canRate);
@@ -242,9 +231,61 @@ public class WebController {
     }
 
     @RequestMapping("/webinfo/modifyweb")
-    public String modifyWeb(Model model) {
-        
-        return "webinfo";
+    public String modifyWeb(@RequestParam(value = "web", defaultValue = "") Long webId,
+            @RequestParam(value = "webName", defaultValue = "") String webName,
+            @RequestParam(value = "url", defaultValue = "") String url,
+            @RequestParam(value = "category", defaultValue = "") String category,
+            @RequestParam(value = "description", defaultValue = "") String description,
+            Model model) {
+
+        User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
+        model.addAttribute("username", theAccountModel.getUsername());
+
+        WebModel theWebModel = theWebRepository.findByUrl(url);
+        WebModel updatedWebModel = theWebRepository.findById(webId);
+        if (theWebModel == null || updatedWebModel.getUrl().equals(url)) {
+            updatedWebModel.setWebName(webName);
+            updatedWebModel.setUrl(url);
+            updatedWebModel.setCategory(WebModel.categoryToInt(category));
+            updatedWebModel.setDescription(description);
+            if (updatedWebModel.isValid()) {
+
+                updatedWebModel.setEditor(theAccountModel);
+                updatedWebModel.setReport(0);
+                theWebRepository.save(updatedWebModel);
+
+                RateModel theRateModel = theRateRepository.findByWebAndRater(updatedWebModel, theAccountModel);
+                List<ReportModel> reportList = theReportRepository.findByWebAndValid(updatedWebModel, 1);
+                for (ReportModel theReportModel : reportList) {
+                    theReportModel.setValid(0);
+                    theReportRepository.save(theReportModel);
+                }
+
+                boolean canRate = true;
+                boolean canReport = true;
+                if (theRateModel != null) {
+                    canRate = false;
+                }
+
+                List<CommentModel> commentList = theCommentRepository.findByWebOrderByPostTimeDesc(theWebModel);
+
+                model.addAttribute("web", updatedWebModel);
+                model.addAttribute("canRate", canRate);
+                model.addAttribute("canReport", canReport);
+                model.addAttribute("commentList", commentList);
+
+                return "webinfo";
+            } else {
+                model.addAttribute("web", theWebModel);
+                model.addAttribute("alert", "Web name and URL should not be empty!");
+                return "modifyweb";
+            }
+        } else {
+            model.addAttribute("web", theWebModel);
+            model.addAttribute("alert", "URL already exists!");
+            return "modifyweb";
+        }
     }
 
     @RequestMapping("/webinfo/comment")
@@ -268,15 +309,13 @@ public class WebController {
         theUserRepository.save(theUserModel);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         boolean canRate = true;
         boolean canReport = true;
-
         if (theRateModel != null) {
             canRate = false;
         }
-
         if (theReportModel != null) {
             canReport = false;
         }
@@ -310,15 +349,13 @@ public class WebController {
         theUserRepository.save(theUserModel);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         boolean canRate = true;
         boolean canReport = true;
-
         if (theRateModel != null) {
             canRate = false;
         }
-
         if (theReportModel != null) {
             canReport = false;
         }
@@ -348,15 +385,13 @@ public class WebController {
         theCommentRepository.save(theCommentModel);
 
         RateModel theRateModel = theRateRepository.findByWebAndRater(theWebModel, theAccountModel);
-        ReportModel theReportModel = theReportRepository.findByWebAndReporter(theWebModel, theAccountModel);
+        ReportModel theReportModel = theReportRepository.findByWebAndReporterAndValid(theWebModel, theAccountModel, 1);
 
         boolean canRate = true;
         boolean canReport = true;
-
         if (theRateModel != null) {
             canRate = false;
         }
-
         if (theReportModel != null) {
             canReport = false;
         }

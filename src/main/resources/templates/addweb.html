@@ -90,10 +90,11 @@
         </div>
 
         <div class="rightnav"></div>
-        
+
         <br/>
         <div class="addWeb">
             <h2>Add the web page you like!</h2>
+            <p style="color:red;" th:text="${alert}"/>
             <form action="/userpage/addnewweb">
                 <table class="webTable" align="center" cellspacing="10">
                     <tr>
@@ -124,9 +125,7 @@
                         <td><textarea name="description"></textarea></td>
                     </tr>
                 </table>
-                <p style="color:red;" th:text="${alert}"/>
                 <input type='submit' />
-                
             </form>
         </div>
         <br/><br/><br/><br/><br/>

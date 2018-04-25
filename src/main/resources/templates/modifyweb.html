@@ -64,9 +64,10 @@
     </head>
     <body>
         <div th:replace="header :: header"></div>
-        
+
         <div class="modifyWeb">
             <h2>Modify the web</h2>
+            <p style="color:red;" th:text="${alert}"/>
             <form action="/webinfo/modifyweb">
                 <table class="webTable" align="center" cellspacing="10">
                     <tr>
@@ -94,12 +95,11 @@
                     </tr>
                     <tr>
                         <td>Description</td>
-                        <td><textarea name="description" th:value="${web.getWebName()}"></textarea></td>
+                        <td><textarea name="description" th:text="${web.getDescription()}"></textarea></td>
                     </tr>
                 </table>
-                <p style="color:red;" th:text="${alert}"/>
+                <input type="hidden" name="web" th:value="${web.getId()}" />
                 <input type='submit' />
-                
             </form>
         </div>
         <br/><br/><br/><br/><br/>

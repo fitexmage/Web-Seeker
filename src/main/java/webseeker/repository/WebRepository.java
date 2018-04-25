@@ -20,7 +20,7 @@ public interface WebRepository extends CrudRepository<WebModel, Long> {
 
     public WebModel findByUrl(String url);
     
-    public List<WebModel> findByCreator(AccountModel theAccountModel);
+    public List<WebModel> findByEditor(AccountModel theAccountModel);
 
     //Search List
     public List<WebModel> findByWebNameContainingIgnoreCaseOrUrlContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String webName, String url, String description);

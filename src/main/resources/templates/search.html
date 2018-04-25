@@ -45,8 +45,8 @@
 
         <div class="searchResult">
             <h2>Search Result</h2>
-            <br/>
             <div th:if="${webList.size() != 0}">
+                <hr></hr>
                 <h2>Web Result</h2>
                 <br/>
                 <table class="searchList">
@@ -62,8 +62,9 @@
                     </tr>
                 </table>
             </div>
-            <br/><br/>
+            <br/>
             <div th:if="${userList.size() != 0}">
+                <hr></hr>
                 <h2>User Result</h2>
                 <br/>
                 <table class="searchList">
