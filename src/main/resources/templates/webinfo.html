@@ -133,10 +133,10 @@
                         <a th:href="'/webinfo/report?web=' + ${web.getId()}">Report it!</a>
                     </div>
                     <div th:if="${!canReport}">
-                        Already reported this web!
+                        Already reported this web page!
                     </div>
                     <br/>
-                    <a th:href="'/webinfo/requestmodifyweb?web=' + ${web.getId()}">Modify this web</a>
+                    <a th:href="'/webinfo/requesteditweb?web=' + ${web.getId()}">Edit information</a>
                     <p style="color:red;" th:text="${alert}"></p>
                 </div>
                 <br/>

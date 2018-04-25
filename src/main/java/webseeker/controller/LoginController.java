@@ -44,13 +44,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model, String error, String logout) {
+    public String login(Model model, String error) {
         if (error != null) {
             model.addAttribute("alert", "Your username and password is invalid.");
-        } else if (logout != null) {
-            List<WebModel> newList = theWebRepository.findTop1000ByOrderByAddTimeDesc();
-            model.addAttribute("newList", newList);
-            return "homepage";
         }
         return "login";
     }

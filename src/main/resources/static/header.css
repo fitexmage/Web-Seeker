@@ -29,15 +29,9 @@ input[type=submit] {
     border:0px;
 }
 
-.welcome{
-    float:right;
-    margin-top:3px;
-    margin-right:120px;
-}
-
 .username{
     margin-top:3px;
-    margin-right:50px;
+    margin-right:20px;
 }
 
 .dropdown {
@@ -49,6 +43,7 @@ input[type=submit] {
 .dropdown-content {
     position: absolute;
     right: 0;
+    margin-right: 10px;
     z-index: 1;
     display: none;
     min-width: 5px;
@@ -63,12 +58,12 @@ input[type=submit] {
     text-decoration: none;
 }
 
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
 }
 
 .dropdown:hover .username {

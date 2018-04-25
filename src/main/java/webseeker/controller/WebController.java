@@ -175,8 +175,8 @@ public class WebController {
         return "webinfo";
     }
 
-    @RequestMapping("/webinfo/requestmodifyweb")
-    public String requestModifyWeb(@RequestParam(value = "web", defaultValue = "") Long webId,
+    @RequestMapping("/webinfo/requesteditweb")
+    public String requestEditWeb(@RequestParam(value = "web", defaultValue = "") Long webId,
             Model model) {
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
@@ -207,7 +207,7 @@ public class WebController {
 
             if (theUserModel.level() >= 4 && reportNum < 1) {
                 model.addAttribute("web", theWebModel);
-                return "modifyweb";
+                return "editweb";
             } else {
                 model.addAttribute("username", theAccountModel.getUsername());
                 model.addAttribute("web", theWebModel);
@@ -223,15 +223,15 @@ public class WebController {
             model.addAttribute("web", theWebModel);
             model.addAttribute("canRate", canRate);
             model.addAttribute("canReport", canReport);
-            model.addAttribute("alert", "Not enough reports, do not need to modify!");
+            model.addAttribute("alert", "Not enough reports, do not need to edit!");
             model.addAttribute("commentList", commentList);
 
             return "webinfo";
         }
     }
 
-    @RequestMapping("/webinfo/modifyweb")
-    public String modifyWeb(@RequestParam(value = "web", defaultValue = "") Long webId,
+    @RequestMapping("/webinfo/editweb")
+    public String editWeb(@RequestParam(value = "web", defaultValue = "") Long webId,
             @RequestParam(value = "webName", defaultValue = "") String webName,
             @RequestParam(value = "url", defaultValue = "") String url,
             @RequestParam(value = "category", defaultValue = "") String category,
@@ -279,12 +279,12 @@ public class WebController {
             } else {
                 model.addAttribute("web", theWebModel);
                 model.addAttribute("alert", "Web name and URL should not be empty!");
-                return "modifyweb";
+                return "editweb";
             }
         } else {
             model.addAttribute("web", theWebModel);
             model.addAttribute("alert", "URL already exists!");
-            return "modifyweb";
+            return "editweb";
         }
     }
 

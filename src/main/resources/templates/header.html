@@ -18,7 +18,6 @@
                         <a th:href="@{/logout}">Log out</a>
                     </div>
                 </div>
-                <p class="welcome" th:text="${welcome}"/>
             </div>
 
             <div class="header">
@@ -31,7 +30,7 @@
                 <a href="/webest">Webest</a>
                 <a href="/category">Category</a>
                 <form class="search" action="/search">
-                    <input type="text" class="searchBar" name="input" placeholder="Search web or people" th:value="${input}"/>
+                    <input type="text" class="searchBar" name="input" placeholder="Search web pages or users" th:value="${input}"/>
                     <input type="submit" class="searchBtn" value="Search"/>
                 </form>
             </div>
