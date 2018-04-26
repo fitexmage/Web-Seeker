@@ -23,7 +23,7 @@ Allow users to rate and write comments for each web page, allow users to "like" 
 Allow users to use search bar to search for web pages or users of, allow users to go to a page called "webest", which contains lots of rank based on different benchmark, allow users to report or request to modify the web pages, allow users to see the others' information, give users recommendation based on history on the homepage, allow users to post icognito comments.
 
 ### Finaly Project
-The final project will contain all the functionalities in the use cases. It will have the setting page about preference, such as whether or not to allow record history. The website will have a footer for introduction of the arthor and reporting bugs. Moreover, when users post a comment or rate a web, they will get experience. The experience will make them level up and have some authority such as modifying the web information.
+The final project will have the setting page about preference, such as whether or not to allow record history. The website will have a explore function which allows users to exlore some random web pages. The website will have a footer for introduction of the arthor and reporting bugs. Moreover, when users post a comment or rate a web, they will get experience. The experience will make them level up and have some authority such as modifying the web information.
 
 ## Project Justification
 
