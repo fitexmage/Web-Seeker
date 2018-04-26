@@ -73,8 +73,14 @@ public class MainController {
             if (webVisitList.size() >= 2) {
                 int category1st = webVisitList.get(0).getKey();
                 int category2nd = webVisitList.get(1).getKey();
-                List<WebModel> recommendList = theWebRepository.findTop10ByCategoryOrCategory(category1st, category2nd);
-                model.addAttribute("recommendList", recommendList);
+                List<WebModel> webList = theWebRepository.findByCategoryOrCategory(category1st, category2nd);
+
+                ArrayList<Integer> randomArray = WebModel.randomCommon(0, webList.size() - 1, 10);
+                ArrayList<WebModel> recommendList = new ArrayList<WebModel>();
+                for (int i = 0; i < randomArray.size(); i++) {
+                    recommendList.add(webList.get(randomArray.get(i)));
+                }
+                model.addAttribute("recommendList", webList);
             }
         }
 
@@ -155,21 +161,20 @@ public class MainController {
 
     @RequestMapping("/explore")
     public String explore(Model model) {
-        
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("username", theUser.getUsername());
         }
-        
-        List<WebModel> allWebList = (List)theWebRepository.findAll();
-        int[] randomArray = WebModel.randomCommon(0, allWebList.size(), 20);
+
+        List<WebModel> allWebList = (List) theWebRepository.findAll();
+        ArrayList<Integer> randomArray = WebModel.randomCommon(0, allWebList.size() - 1, 20);
         ArrayList<WebModel> webList = new ArrayList<WebModel>();
-        
-        for(int i = 0; i< randomArray.length;i++){
-            webList.add(allWebList.get(randomArray[i]));
+        for (int i = 0; i < randomArray.size(); i++) {
+            webList.add(allWebList.get(randomArray.get(i)));
         }
-        
+
         model.addAttribute("webList", webList);
 
         return "explore";

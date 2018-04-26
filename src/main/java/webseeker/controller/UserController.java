@@ -66,16 +66,15 @@ public class UserController {
         User theUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
-
-        if (!username.equals("")) {
-            theAccountModel.setUsername(username);
+        theAccountModel.setUsername(username);
+        if (theAccountModel.editError().equals("")) {
             theAccountRepository.save(theAccountModel);
             theUserModel.setName(name);
             theUserModel.setEmail(email);
             theUserRepository.save(theUserModel);
             model.addAttribute("alert", "Modify successfully!");
         } else {
-            model.addAttribute("alert", "Something was wrong!");
+            model.addAttribute("alert", theAccountModel.editError());
         }
 
         List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
@@ -111,11 +110,11 @@ public class UserController {
         WebModel theWebModel = theWebRepository.findByUrl(url);
         if (theWebModel == null) {
             WebModel newWebModel = WebModel.newWeb(theAccountModel, webName, url, category, description);
-            if (newWebModel.isValid()) {
+            if (newWebModel.error().equals("")) {
                 theWebRepository.save(newWebModel);
                 model.addAttribute("alert", "Add successfully!");
             } else {
-                model.addAttribute("alert", "Web name and URL should not be empty!");
+                model.addAttribute("alert", newWebModel.error());
             }
         } else {
             model.addAttribute("alert", "URL already exists!");

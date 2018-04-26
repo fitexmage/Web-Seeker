@@ -6,7 +6,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <link rel="stylesheet" href="/footer.css" type="text/css" />
-        <script type="text/javascript" src="/link.js"></script>
         <style>
             .explore {
                 padding: 15px;
@@ -22,7 +21,10 @@
             {
                 border:1px solid #98bf21;
                 padding:10px 20px 10px 20px;
-                min-width: 120px;
+                max-width: 400px;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow: ellipsis;
             }
 
             .webList th 
@@ -30,7 +32,7 @@
                 font-size:1.1em;
                 padding-top:5px;
                 padding-bottom:4px;
-                background-color:#A7C942;
+                background-color:#9933ff;
                 color:#ffffff;
             }
 
@@ -45,7 +47,7 @@
         <div th:replace="header :: header"></div>
 
         <div class="explore">
-            <h2>Explore Random Page!</h2>
+            <h2>Explore Random Things!</h2>
             <table class="webList">
                 <tr>
                     <th>Web</th>

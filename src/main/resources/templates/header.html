@@ -4,15 +4,14 @@
         <title>Header</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
-        <script type="text/javascript" src="/link.js"></script>
 
     </head>
     <body>
         <div th:fragment="header" >
             <div class="cover">
-                <input type="button" class="login" value="Sign in" onclick="login()" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}"/>
+                <a class="login" href="/login" th:style="'display:' + @{(${username!=null} ? 'none' : 'inline-block')}">Sign in</a>
                 <div class="dropdown">
-                    <a class="username" href="" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
+                    <a class="username" href="/" th:text="${username}" th:style="'display:' + @{(${username!=null} ? 'block' : 'none')}"/>
                     <div class="dropdown-content">
                         <a href="/userpage">Account</a>
                         <a th:href="@{/logout}">Log out</a>

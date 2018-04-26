@@ -46,15 +46,29 @@ public class AccountModel {
         AccountModel newAccountModel = new AccountModel(username, password, 1);
         return newAccountModel;
     }
-
-    public boolean isValid() {
-        boolean valid = false;
-        if (!username.equals("") && !password.equals("")) {
-            valid = true;
-        } else {
-            valid = false;
+    
+    public String editError() {
+        if (username.equals("")) {
+            return "Username should not be empty!";
+        } 
+        else if(username.length() >= 20){
+            return "Username should be no more than 20!";
         }
-        return valid;
+        else {
+            return "";
+        }
+    }
+
+    public String registerError() {
+        if (username.equals("") || password.equals("")) {
+            return "Username and password should not be empty!";
+        } 
+        else if(username.length() >= 20){
+            return "Username should be no more than 20!";
+        }
+        else {
+            return "";
+        }
     }
 
     /**

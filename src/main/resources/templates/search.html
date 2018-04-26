@@ -6,7 +6,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <link rel="stylesheet" href="/footer.css" type="text/css" />
-        <script type="text/javascript" src="/link.js"></script>
         <style>
             .searchResult {
                 float: left;
@@ -17,13 +16,11 @@
 
             .webResult{
                 float: left;
-                margin-left: 30px;
-                width: 60%;
+                width: 65%;
             }
 
             .userResult{
                 float: left;
-                margin-left: 30px;
                 width: 30%;
             }
 
@@ -36,7 +33,10 @@
             {
                 border:1px solid #98bf21;
                 padding:10px 20px 10px 20px;
-                min-width: 120px;
+                max-width: 300px;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow: ellipsis;
             }
 
             .searchList th 

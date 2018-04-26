@@ -5,10 +5,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/header.css" type="text/css" />
         <link rel="stylesheet" href="/footer.css" type="text/css" />
-        <script type="text/javascript" src="/link.js"></script>
         <style>
+            table{
+                margin: auto;
+            }
+            
             .textField {
-                width: 20%;
                 padding: 10px 5px;
                 margin: 8px 30px;
                 display: inline-block;
@@ -27,10 +29,22 @@
         <div th:replace="header :: header"></div>
 
         <h2 align="center">Register</h2>
-        <br/>
         <form action="/register" method="post" align="center">
-            Username: <input type='text' class="textField" name='username'/><br/><br/>
-            Password: <input type='password' class="textField" name='password'/><br/><br/>
+            <table>
+                <tr>
+                    <td>Username:</td>
+                    <td><input type='text' class="textField" name='username'/></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type='password' class="textField" name='password'/></td>
+                </tr>
+                <tr>
+                    <td>Confirm Password:</td>
+                    <td><input type='password' class="textField" name='confirmPassword'/></td>
+                </tr>
+            </table>
+            <br/>
             <input id="confirm" type='submit' value='Confirm'/><br/><br/>
             Already have an account?
             <a href="/login">Sign in</a>

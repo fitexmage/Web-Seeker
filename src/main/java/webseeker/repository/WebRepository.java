@@ -26,7 +26,7 @@ public interface WebRepository extends CrudRepository<WebModel, Long> {
     public List<WebModel> findByWebNameContainingIgnoreCaseOrUrlContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String webName, String url, String description);
 
     //Recommend List
-    public List<WebModel> findTop10ByCategoryOrCategory(int category1st, int category2nd);
+    public List<WebModel> findByCategoryOrCategory(int category1st, int category2nd);
 
     //New List
     public List<WebModel> findTop10ByOrderByAddTimeDesc();

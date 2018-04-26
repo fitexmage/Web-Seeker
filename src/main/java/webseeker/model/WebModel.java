@@ -7,6 +7,7 @@ package webseeker.model;
 
 import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,11 +63,16 @@ public class WebModel {
 
     }
 
-    public boolean isValid() {
-        if (!webName.equals("") & !url.equals("")) {
-            return true;
-        } else {
-            return false;
+    public String error() {
+        if (webName.equals("") || url.equals("")) {
+            return "Web name and URL should not be empty";
+        } else if (webName.length() >= 25) {
+            return "Web name should be no more than 25";
+        }else if(description.length() >= 255){
+            return "Description should be no more than 255";
+        }
+        else {
+            return "";
         }
     }
 
@@ -134,23 +140,23 @@ public class WebModel {
         }
     }
 
-    public static int[] randomCommon(int min, int max, int n) {
-        if (n > (max - min + 1) || max < min) {
-            return null;
+    public static ArrayList<Integer> randomCommon(int min, int max, int n) {
+        if (n > (max - min + 1)) {
+            n = max - min + 1;
         }
-        int[] result = new int[n];
+        ArrayList<Integer> result = new ArrayList<Integer>();
         int count = 0;
         while (count < n) {
-            int num = (int) (Math.random() * (max - min)) + min;
+            int num = (int) (Math.random() * (max - min + 1)) + min;
             boolean flag = true;
-            for (int j = 0; j < n; j++) {
-                if (num == result[j]) {
+            for (int j = 0; j < result.size(); j++) {
+                if (num == result.get(j)) {
                     flag = false;
                     break;
                 }
             }
             if (flag) {
-                result[count] = num;
+                result.add(num);
                 count++;
             }
         }

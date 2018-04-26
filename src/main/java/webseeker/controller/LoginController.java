@@ -20,7 +20,7 @@ public class LoginController {
 
     @Autowired
     private UserService theUserService;
-    
+
     @Autowired
     private UserRepository theUserRepository;
 
@@ -35,7 +35,7 @@ public class LoginController {
 
     @Autowired
     private ActionRepository theActionRepository;
-    
+
     @Autowired
     private ReportRepository theReportRepository;
 
@@ -46,7 +46,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error) {
         if (error != null) {
-            model.addAttribute("alert", "Your username and password is invalid.");
+            model.addAttribute("alert", "Your username and password are empty or not match.");
         }
         return "login";
     }
@@ -67,21 +67,27 @@ public class LoginController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@RequestParam(value = "username", defaultValue = "") String username,
             @RequestParam(value = "password", defaultValue = "") String password,
+            @RequestParam(value = "confirmPassword", defaultValue = "") String confirmPassword,
             Model model) {
-        AccountModel newAccountModel = AccountModel.newAccount(username, password);
-        if (newAccountModel.isValid()) {
-            if (theUserService.findByUsername(username) == null) {
-                theUserService.save(newAccountModel);
-                UserModel newUserModel = UserModel.newUser(newAccountModel);
-                theUserRepository.save(newUserModel);
-                model.addAttribute("alert", "Register Successfully!");
-                return "login";
+        if (password.equals(confirmPassword)) {
+            AccountModel newAccountModel = AccountModel.newAccount(username, password);
+            if (newAccountModel.registerError().equals("")) {
+                if (theUserService.findByUsername(username) == null) {
+                    theUserService.save(newAccountModel);
+                    UserModel newUserModel = UserModel.newUser(newAccountModel);
+                    theUserRepository.save(newUserModel);
+                    model.addAttribute("alert", "Register Successfully!");
+                    return "login";
+                } else {
+                    model.addAttribute("alert", "Username already exists!");
+                    return "register";
+                }
             } else {
-                model.addAttribute("alert", "Username already exists!");
+                model.addAttribute("alert", newAccountModel.registerError());
                 return "register";
             }
         } else {
-            model.addAttribute("alert", "Please input valid username and password!");
+            model.addAttribute("alert", "Password does not match!");
             return "register";
         }
     }

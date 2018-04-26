@@ -205,7 +205,7 @@ public class WebController {
                 reportNum += theWeb.getReport();
             }
 
-            if (theUserModel.level() >= 4 && reportNum < 1) {
+            if (theUserModel.level() >= 4 && reportNum < 5) {
                 model.addAttribute("web", theWebModel);
                 return "editweb";
             } else {
@@ -249,7 +249,7 @@ public class WebController {
             updatedWebModel.setUrl(url);
             updatedWebModel.setCategory(WebModel.categoryToInt(category));
             updatedWebModel.setDescription(description);
-            if (updatedWebModel.isValid()) {
+            if (updatedWebModel.error().equals("")) {
 
                 updatedWebModel.setEditor(theAccountModel);
                 updatedWebModel.setReport(0);
@@ -278,7 +278,7 @@ public class WebController {
                 return "webinfo";
             } else {
                 model.addAttribute("web", theWebModel);
-                model.addAttribute("alert", "Web name and URL should not be empty!");
+                model.addAttribute("alert", updatedWebModel.error());
                 return "editweb";
             }
         } else {
