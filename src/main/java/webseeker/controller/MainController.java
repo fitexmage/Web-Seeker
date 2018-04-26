@@ -80,7 +80,7 @@ public class MainController {
                 for (int i = 0; i < randomArray.size(); i++) {
                     recommendList.add(webList.get(randomArray.get(i)));
                 }
-                model.addAttribute("recommendList", webList);
+                model.addAttribute("recommendList", recommendList);
             }
         }
 
