@@ -60,6 +60,18 @@ public class UserModel {
             return (int) sqrt((double) exp);
         }
     }
+    
+    public String error() {
+        if(name.length() >= 20){
+            return "Name should be no more than 20!";
+        }
+        else if(email.length() >= 100){
+            return "Email should be no more than 100!";
+        }
+        else {
+            return "";
+        }
+    }
 
     /**
      * @return the id

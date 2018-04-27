@@ -67,14 +67,16 @@ public class UserController {
         AccountModel theAccountModel = theAccountRepository.findByUsername(theUser.getUsername());
         UserModel theUserModel = theUserRepository.findByUser(theAccountModel);
         theAccountModel.setUsername(username);
-        if (theAccountModel.editError().equals("")) {
+        theUserModel.setName(name);
+        theUserModel.setEmail(email);
+        if (theAccountModel.editError().equals("") && theUserModel.error().equals("")) {
             theAccountRepository.save(theAccountModel);
-            theUserModel.setName(name);
-            theUserModel.setEmail(email);
             theUserRepository.save(theUserModel);
             model.addAttribute("alert", "Modify successfully!");
-        } else {
+        } else if (!theAccountModel.editError().equals("")) {
             model.addAttribute("alert", theAccountModel.editError());
+        } else if (!theUserModel.error().equals("")) {
+            model.addAttribute("alert", theUserModel.error());
         }
 
         List<RateModel> rateList = theRateRepository.findByRater(theAccountModel);
