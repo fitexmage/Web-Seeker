@@ -98,12 +98,19 @@ public class MainController {
             model.addAttribute("username", theUser.getUsername());
         }
 
-        List<WebModel> webSearchList = theWebRepository.findByWebNameContainingIgnoreCaseOrUrlContainingIgnoreCaseOrDescriptionContainingIgnoreCase(input, input, input);
-        List<UserModel> userSearchList = theUserRepository.findByNameContainingIgnoreCase(input);
-        model.addAttribute("input", input);
-        model.addAttribute("webList", webSearchList);
-        model.addAttribute("userList", userSearchList);
-
+        if (!input.equals("")) {
+            List<WebModel> webSearchList = theWebRepository.findByWebNameContainingIgnoreCaseOrUrlContainingIgnoreCaseOrDescriptionContainingIgnoreCase(input, input, input);
+            List<UserModel> userSearchList = theUserRepository.findByNameContainingIgnoreCase(input);
+            model.addAttribute("input", input);
+            model.addAttribute("webList", webSearchList);
+            model.addAttribute("userList", userSearchList);
+        }else{
+            List<WebModel> webSearchList = new ArrayList<WebModel>();
+            List<UserModel> userSearchList = new ArrayList<UserModel>();
+            model.addAttribute("input", input);
+            model.addAttribute("webList", webSearchList);
+            model.addAttribute("userList", userSearchList);
+        }
         return "search";
     }
 
