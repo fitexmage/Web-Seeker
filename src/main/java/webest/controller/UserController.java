@@ -1,7 +1,18 @@
-package webseeker.controller;
+package webest.controller;
 
-import webseeker.repository.*;
-import webseeker.model.*;
+import webest.repository.ActionRepository;
+import webest.repository.WebRepository;
+import webest.repository.UserRepository;
+import webest.repository.AccountRepository;
+import webest.repository.RateRepository;
+import webest.repository.ReportRepository;
+import webest.repository.CommentRepository;
+import webest.model.CommentModel;
+import webest.model.WebModel;
+import webest.model.AccountModel;
+import webest.model.ActionModel;
+import webest.model.UserModel;
+import webest.model.RateModel;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

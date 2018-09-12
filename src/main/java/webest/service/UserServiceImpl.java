@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.service;
+package webest.service;
 
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import webseeker.model.AccountModel;
-import webseeker.repository.AccountRepository;
-import webseeker.repository.RoleRepository;
+import webest.model.AccountModel;
+import webest.repository.AccountRepository;
+import webest.repository.RoleRepository;
 
 /**
  *

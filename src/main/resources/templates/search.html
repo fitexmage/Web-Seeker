@@ -62,6 +62,9 @@
             <h2>Search Result</h2>
             <br/>
             <hr></hr>
+            <div class="webResult" th:if="${webList.size() == 0}">
+                <h2>No web page found</h2>
+            </div>
             <div class="webResult" th:if="${webList.size() != 0}">
                 <h2>Web Result</h2>
                 <table class="searchList">
@@ -76,6 +79,9 @@
                         <td th:text="${web.categoryToString(web.getCategory())}"/>
                     </tr>
                 </table>
+            </div>
+            <div class="userResult" th:if="${userList.size() == 0}">
+                <h2>No user found</h2>
             </div>
             <div class="userResult" th:if="${userList.size() != 0}">
                 <h2>User Result</h2>

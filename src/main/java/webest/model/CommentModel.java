@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.model;
+package webest.model;
 
 import java.time.ZonedDateTime;
 import javax.persistence.Entity;

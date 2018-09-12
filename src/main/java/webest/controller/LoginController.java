@@ -1,7 +1,14 @@
-package webseeker.controller;
+package webest.controller;
 
-import webseeker.repository.*;
-import webseeker.model.*;
+import webest.repository.ActionRepository;
+import webest.repository.WebRepository;
+import webest.repository.UserRepository;
+import webest.repository.RateRepository;
+import webest.repository.ReportRepository;
+import webest.repository.CommentRepository;
+import webest.model.WebModel;
+import webest.model.AccountModel;
+import webest.model.UserModel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -13,7 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import webseeker.service.UserService;
+import webest.service.UserService;
 
 @Controller
 public class LoginController {

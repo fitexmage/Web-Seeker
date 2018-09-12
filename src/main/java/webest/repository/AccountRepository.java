@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.repository;
+package webest.repository;
 
-import java.util.List;
-import webseeker.model.ActionModel;
 import org.springframework.data.repository.CrudRepository;
-import webseeker.model.AccountModel;
+
+import webest.model.AccountModel;
 
 /**
  *
  * @author fitexmage
  */
-public interface ActionRepository extends CrudRepository<ActionModel, Long>{
+public interface AccountRepository extends CrudRepository<AccountModel, Long>{
     
-    public List<ActionModel> findByVisiter(AccountModel theAccountModel);
-
+    public AccountModel findById(Long id);
+    
+    public AccountModel findByUsername(String username);
+    
 }

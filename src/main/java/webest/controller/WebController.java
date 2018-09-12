@@ -3,8 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.controller;
+package webest.controller;
 
+import webest.repository.ActionRepository;
+import webest.repository.WebRepository;
+import webest.repository.UserRepository;
+import webest.repository.AccountRepository;
+import webest.repository.RateRepository;
+import webest.repository.ReportRepository;
+import webest.repository.CommentRepository;
+import webest.model.CommentModel;
+import webest.model.WebModel;
+import webest.model.AccountModel;
+import webest.model.ActionModel;
+import webest.model.ReportModel;
+import webest.model.UserModel;
+import webest.model.RateModel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -15,8 +29,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import webseeker.model.*;
-import webseeker.repository.*;
 
 /**
  *

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker;
+package webest;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;

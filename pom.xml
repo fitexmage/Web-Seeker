@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework</groupId>
-    <artifactId>WebSeeker</artifactId>
+    <artifactId>Webest</artifactId>
     <version>0.1.0</version>
     
     <packaging>war</packaging>
@@ -62,5 +62,5 @@
             </plugin>
         </plugins>
     </build>
-
+    <name>Webest</name>
 </project>

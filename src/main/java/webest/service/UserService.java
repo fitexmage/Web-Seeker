@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.service;
+package webest.service;
 
-import webseeker.model.AccountModel;
+import webest.model.AccountModel;
 
 /**
  *

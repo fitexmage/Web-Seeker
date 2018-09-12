@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webseeker.repository;
+package webest.repository;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
-import webseeker.model.AccountModel;
-import webseeker.model.UserModel;
+import webest.model.AccountModel;
+import webest.model.UserModel;
 
 /**
  *
